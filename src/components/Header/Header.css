@@ -1,0 +1,63 @@
+.header {
+  font-family: "Roboto Medium";
+  height: 80px;
+  max-width: 100%;
+  border-bottom: 1px solid #545454;
+}
+
+.header__logo {
+  font-family: "Robotoslab";
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
+  margin: 30px 0 25px 0;
+}
+
+.header__container {
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 104px;
+  margin-right: 104px;
+}
+
+.header__button {
+  border: 1px solid black;
+  box-sizing: border-box;
+  border-radius: 100px;
+  cursor: pointer;
+  background-color: transparent;
+  width: 176px;
+  height: 48px;
+  outline: none;
+  font-size: 18px;
+  line-height: 24px;
+  margin-left: 32px;
+}
+
+.header__link {
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  color: black;
+  font-size: 18px;
+  line-height: 24px;
+  margin-left: 32px;
+}
+
+.header__menu {
+}
+
+.header__menu_open {
+}
+
+.header__button-container {
+}
+
+.header__button-container {
+}
+
+.header__container-login {
+}
