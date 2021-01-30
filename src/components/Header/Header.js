@@ -8,6 +8,7 @@ export default function Header({ userName, onSignOut, ...props }) {
         <Switch>
             <Route exact path="/">
                 <header className="header">
+                    <div className="header__background" />
                     <div className="header__container">
                         <h3 className="header__logo">NewsExplorer</h3>
                         <div className={`header__menu ${props.onClickMenu ? `header__menu_open` : ""}`}>
@@ -16,6 +17,7 @@ export default function Header({ userName, onSignOut, ...props }) {
                             <button className="header__button">Авторизоваться</button>
                         </div>
                     </div>
+
                 </header>
             </Route>
             <Route exact path="/saved-news">
