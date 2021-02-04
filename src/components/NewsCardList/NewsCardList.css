@@ -1,0 +1,46 @@
+.new-cardlist {
+  display: flex;
+  flex-direction: column;
+  padding: 80px 0;
+  background-color: rgba(245, 246, 247, 1);
+  font-family: "Roboto Medium";
+}
+
+.new-cardlist__results-title {
+  font-family: Robotoslab;
+  max-width: 712px;
+  margin: 0 auto 64px;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 46px;
+  text-align: left;
+}
+
+.new-cardlist__container {
+  display: grid;
+  grid-template-rows: repeat(auto, 576px);
+  grid-template-columns: repeat(3, 400px);
+  row-gap: 16px;
+  column-gap: 16px;
+  margin: auto;
+}
+
+.new-cardlist__button {
+  font-size: 18px;
+  line-height: 24px;
+  outline: none;
+  border: none;
+  margin: 64px auto 18px;
+  width: 288px;
+  height: 64px;
+  border-radius: 80px;
+  background: white;
+  color: black;
+  transition: ease-in 0.3s all;
+}
+
+.new-cardlist__button:hover {
+  background: rgb(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: ease-in 0.3s all;
+}

@@ -1,0 +1,189 @@
+.new-card {
+  position: relative;
+  background: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-family: "Roboto Medium";
+  transition: ease-in 0.3s all;
+}
+
+.new-card:hover {
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  transition: ease-in 0.3s all;
+}
+
+.new-card__image {
+  width: 400px;
+  height: 272px;
+  object-fit: cover;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.new-card__keyword {
+  position: absolute;
+  top: 18px;
+  left: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: center;
+  margin: 0;
+}
+
+.new-card__keyword_hidden {
+  display: none;
+}
+
+.new-card__remove-icon {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  background: url(../../images/trashbox.svg);
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-color: white;
+  background-position: center;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__remove-icon:hover {
+  background: url(../../images/trashbox_active.svg);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-color: white;
+  background-position: center;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__remove-icon_hidden {
+  display: none;
+}
+
+.new-card__remove-window {
+  position: absolute;
+  height: 40px;
+  top: 18px;
+  right: 60px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__remove-window_hidden {
+  display: none;
+}
+
+.new-card__remind-window {
+  position: absolute;
+  height: 40px;
+  top: 16px;
+  right: 60px;
+  border-radius: 8px;
+  border: none;
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 12px;
+  background-color: white;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__remind-window_hidden {
+  display: none;
+}
+
+.new-card__mark_active {
+  background: url(../../images/bookmark_active-blue.svg);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-color: white;
+  background-position: center;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__mark:hover {
+  background: url(../../images/bookmark_active.svg);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-color: white;
+  background-position: center;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__mark {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  background: url(../../images/bookmark.svg);
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-color: white;
+  background-position: center;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  transition: ease-in 0.3s all;
+}
+
+.new-card__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 260px;
+  margin: 20px 24px 24px;
+}
+
+.new-card__date {
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(182, 188, 191, 1);
+  font-family: Sourcesanspro;
+  margin: 0;
+}
+
+.new-card__link {
+  text-decoration: none;
+  color: black;
+}
+
+.new-card__title {
+  font-family: Robotoslab;
+  margin: 0;
+  font-size: 26px;
+  line-height: 30px;
+}
+
+.new-card__information {
+  font-size: 16px;
+  line-height: 22px;
+  margin: 0;
+  height: 110px;
+  overflow: hidden;
+}
+
+.new-card__source {
+  font-family: Robotoslab;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  margin: 0;
+  color: rgba(182, 188, 191, 1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

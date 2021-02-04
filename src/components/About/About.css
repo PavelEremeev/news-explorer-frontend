@@ -12,13 +12,12 @@
   height: 464px;
   width: 464px;
   border-radius: 50%;
-  object-fit: cover;
-  background: cover;
 }
 
 .about__container {
   margin-left: 56px;
   margin-top: 131px;
+  margin-right: 150px;
   text-align: left;
   max-width: 600px;
 }
