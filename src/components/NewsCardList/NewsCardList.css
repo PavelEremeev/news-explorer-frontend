@@ -8,7 +8,7 @@
 
 .new-cardlist__results-title {
   font-family: Robotoslab;
-  max-width: 712px;
+  width: 1233px;
   margin: 0 auto 64px;
   font-weight: 400;
   font-size: 40px;
@@ -18,8 +18,8 @@
 
 .new-cardlist__container {
   display: grid;
-  grid-template-rows: repeat(auto, 576px);
-  grid-template-columns: repeat(3, 400px);
+  grid-template-rows: repeat(1, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   row-gap: 16px;
   column-gap: 16px;
   margin: auto;
@@ -34,7 +34,7 @@
   width: 288px;
   height: 64px;
   border-radius: 80px;
-  background: white;
+  background: rgba(196, 196, 196, 0.1);
   color: black;
   transition: ease-in 0.3s all;
 }
