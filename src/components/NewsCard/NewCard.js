@@ -47,7 +47,7 @@ export default function NewCard({
             <button className={isMarked ? "new-card__remind-window"
                 : "new-card__remind-window_hidden"}>
                 Войдите, чтобы сохранить статью</button>
-            {status = "searchNews" ?
+            {status === "searchNews" ?
                 <button onClick={isLoggedIn ? handleAddToFavsClick : handleMarkClick}
                     className={isAdded ? "new-card__mark_active" : "new-card__mark"} /> :
                 <button onClick={handleRemoveClick} className="new-card__remove-icon" />}

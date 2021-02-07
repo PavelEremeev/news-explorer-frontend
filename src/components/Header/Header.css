@@ -49,7 +49,6 @@
   outline: none;
   font-size: 18px;
   line-height: 24px;
-  margin-left: 32px;
   transition: ease-in 0.3s all;
 }
 
@@ -66,8 +65,9 @@
   color: white;
   font-size: 18px;
   line-height: 24px;
-  margin-left: 32px;
+  margin-right: 32px;
   transition: ease-in 0.3s all;
+  position: relative;
 }
 
 .header__link:hover {
@@ -75,16 +75,62 @@
   opacity: 0.5;
 }
 
-.header__menu {
+.header__border {
+  border-bottom: white solid 3px;
+  width: 68px;
+  position: absolute;
+  right: 523px;
 }
 
+.header__border-login {
+  border-bottom: black solid 3px;
+  width: 176px;
+  position: absolute;
+  right: 246px;
+}
+
+.header__logo-login {
+  color: black;
+}
+
+.header__link-login {
+  color: black;
+}
+
+.header__menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 .header__menu_open {
 }
 
 .header__button-container {
+  cursor: pointer;
 }
 
-.header__button-container {
+.header__button-login {
+  border: 1px solid black;
+  color: black;
+  position: relative;
+  padding-top: 8px;
+  padding-left: 15px;
+  padding-bottom: 8px;
+  padding-right: 40px;
+  text-decoration: none;
+  transition: ease-in 0.3s all;
+}
+
+.header__button-image {
+  right: 120px;
+  top: 33px;
+  position: absolute;
+  background: url(../../images/exit.svg);
+  height: 16px;
+  width: 16px;
+  background-size: cover;
+  background-position: center;
 }
 
 .header__container-login {

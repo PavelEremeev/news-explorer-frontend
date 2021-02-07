@@ -1,0 +1,47 @@
+.saved-news {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.saved-news__container {
+  text-align: left;
+  width: 1235px;
+  margin: auto;
+}
+
+.saved-news__title {
+  font-family: Roboto Regular;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  color: rgba(26, 27, 34, 0.5);
+}
+
+.saved-news__info {
+  font-family: "Robotoslab";
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 46px;
+  color: rgba(26, 27, 34, 1);
+  margin: 0;
+  max-width: 712px;
+}
+
+.saved-news__subtitle {
+  font-family: "Roboto Regular";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(26, 27, 34, 1);
+}
+
+.saved-news__keyword {
+  font-family: "Roboto Medium";
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(26, 27, 34, 1);
+  margin: 0;
+}

@@ -79,7 +79,7 @@ export default function NewsCardList({ isLoggedIn, status }) {
     return (
         <section className="new-cardlist">
             {status === "searchNews" ? <h2 className="new-cardlist__results-title">Результаты поиска</h2> : <></>}
-            <div className="new-cardlist__container">
+            <div className="new-cardlist__grid-container">
                 {status === "searchNews" ? (elementsToRender.map(card =>
                     <NewCard
                         status={status}

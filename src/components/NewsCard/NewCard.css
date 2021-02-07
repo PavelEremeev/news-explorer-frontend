@@ -32,6 +32,8 @@
   line-height: 24px;
   text-align: center;
   margin: 0;
+  background-color: white;
+  padding: 8px 15px;
 }
 
 .new-card__keyword_hidden {
@@ -112,7 +114,15 @@
   background-size: 60%;
   background-color: white;
   background-position: center;
+  border-radius: 8px;
   transition: ease-in 0.3s all;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  outline: none;
 }
 
 .new-card__mark:hover {
