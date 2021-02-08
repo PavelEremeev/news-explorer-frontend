@@ -4,7 +4,7 @@ import "./Header.css";
 
 
 
-export default function Header({ userName, onSignOut, ...props }) {
+export default function Header({ userName, isOpen, onSignOut, ...props }) {
 
 
 
@@ -18,7 +18,7 @@ export default function Header({ userName, onSignOut, ...props }) {
                         <div className={`header__menu ${props.onClickMenu ? `header__menu_open` : ""}`}>
                             <Link to="/" className="header__link">Главная</Link>
                             <Link to="/saved-news" className="header__link">Сохранённые статьи</Link>
-                            <button className="header__button">Авторизоваться</button>
+                            <button className="header__button" onClick={isOpen}>Авторизоваться</button>
                         </div>
                     </div>
                     <div className="header__border" />
@@ -32,7 +32,7 @@ export default function Header({ userName, onSignOut, ...props }) {
                             <Link to="/" className="header__link header__link-login">Главная</Link>
                             <Link to="/saved-news" className="header__link header__link-login">Сохранённые статьи</Link>
                             <div className="header__button-container">
-                                <Link to={onSignOut} className="header__button header__button-login">Павел</Link>
+                                <Link to="/" onClick={onSignOut} className="header__button header__button-login">Павел</Link>
                                 <div className="header__button-image" />
                             </div>
                         </div>
