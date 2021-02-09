@@ -25,7 +25,7 @@
   background-color: white;
   border-radius: 10px;
   width: 430px;
-  height: 380px;
+  min-height: 182px;
   position: absolute;
   transition: ease 0.5s;
   align-items: center;
@@ -36,14 +36,22 @@
   background-repeat: no-repeat;
   border: none;
   cursor: pointer;
+  outline: none;
   transition: linear 0.3s all;
-  width: 41px;
-  height: 41px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   position: absolute;
   top: -40px;
   right: -40px;
+  padding: 0;
 }
+
+.popup__close-button:hover {
+  opacity: 0.5;
+  transition: ease 0.5s all;
+}
+
 .popup__title {
   font-family: "Roboto Black";
   font-weight: 900;
@@ -51,6 +59,8 @@
   line-height: 28px;
   text-align: left;
   width: 83%;
+  margin-top: 34px;
+  margin-bottom: 21px;
 }
 .popup__subtitle {
   font-family: "Inter";
@@ -59,7 +69,7 @@
   text-align: left;
   color: rgb(47, 113, 229);
   width: 83%;
-  margin: 8px auto;
+  margin: 0 auto 9px auto;
 }
 .popup__input {
   font-family: "Inter";
@@ -93,16 +103,19 @@
   height: 64px;
   width: 83%;
   outline: none;
+  transition: ease 0.5s all;
 }
 
 .popup__submit-button:hover {
   cursor: pointer;
   background: rgb(52, 126, 255, 1);
+  transition: ease 0.5s all;
 }
 
 .popup__submit-button:active {
   cursor: pointer;
   background: rgb(42, 101, 204, 1);
+  transition: ease 0.5s all;
 }
 
 .popup__login {
@@ -111,6 +124,7 @@
   justify-content: center;
   height: 17px;
   margin-top: 16px;
+  margin-bottom: 28px;
 }
 
 .popup__login-text {
@@ -126,8 +140,15 @@
   font-size: 14px;
   line-height: 17px;
   border: none;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   margin: 0;
   color: rgb(42, 101, 204, 1);
+  transition: ease 0.5s all;
+  width: 83%;
+}
+
+.popup__link:hover {
+  opacity: 0.5;
+  transition: ease 0.5s all;
 }

@@ -8,6 +8,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import Footer from '../Footer/Footer';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
+import InfoPopup from '../InfoPopup/InfoPopup';
 
 function App() {
   const history = useHistory();
@@ -16,7 +17,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isSigninPopupOpened, setSigninPopupOpened] = useState(false)
   const [isSignupPopupOpened, setSignupPopupOpened] = useState(false)
-  const [isInfoPoupOpened, setInfoPopupOpened] = useState(false)
+  const [isInfoPopupOpened, setInfoPopupOpened] = useState(false)
 
   function handleSigninPopup() {
     setSigninPopupOpened(true)
@@ -47,12 +48,12 @@ function App() {
     setInfoPopupOpened(false)
   }
   // switch from one popup to another
-  function signupPopup() {
+  function changeToSignupPopup() {
     closeAllPopups()
     handleSignupPopup()
   }
 
-  function signinPopup() {
+  function changeToSigninPopup() {
     closeAllPopups()
     handleSigninPopup()
   }
@@ -84,8 +85,15 @@ function App() {
         isOpen={isSigninPopupOpened}
         buttonText="Войти"
         linkText="Зарегистрироваться"
-        switchPopup={signupPopup}
+        switchPopup={changeToSignupPopup}
         onSubmit={submitSigninPopup}
+      />
+      <InfoPopup
+        onClose={closeAllPopups}
+        popupTitle="Пользователь успешно зарегистрирован"
+        isOpen={isInfoPopupOpened}
+        linkText="Войти"
+        switchPopup={changeToSigninPopup}
       />
     </div>
   );
