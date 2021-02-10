@@ -16,7 +16,7 @@ export default function About() {
 backend-ом и&nbsp;базово знаю: NodeJS(Express) и&nbsp;MongoDB.</p>
                 <p className="about__description">Хочу найти себя в&nbsp;этом безграничном мире IT. А&nbsp;если
                 серьезно, то&nbsp;я&nbsp;пришел сюда из&nbsp;мира строительства, где все очень <b>(очень)</b> аналоговое и&nbsp;архаичное, хочется сделать строительство
-&mdash;&nbsp;цифровым и&nbsp;удобным в&nbsp;работе для проектировщиков и&nbsp; сдаче объекта для строителей.</p>
+&mdash;&nbsp;цифровым и&nbsp;удобным в&nbsp;работе для проектировщиков и&nbsp; сдаче объектов для строителей.</p>
             </div>
         </section>
     )

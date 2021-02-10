@@ -60,3 +60,11 @@
   transition: ease-out 0.3s all;
   opacity: 0.5;
 }
+
+@media screen and (max-width: 767px) {
+  .footer {
+    margin-top: 15px;
+    flex-direction: column;
+    flex-flow: column-reverse;
+  }
+}

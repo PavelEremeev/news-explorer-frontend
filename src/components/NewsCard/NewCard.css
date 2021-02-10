@@ -11,8 +11,8 @@
 }
 
 .new-card:hover {
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-  transition: ease-in 0.3s all;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px 0 rgb(0 0 0 / 50%);
 }
 
 .new-card__image {
@@ -208,4 +208,73 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+@media screen and (max-width: 950px) {
+  .new-card__title {
+    font-size: 24px;
+  }
+  .new-card__remind-window {
+    height: 40px;
+    top: 8px;
+    right: 55px;
+    width: 150px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 10px;
+  }
+
+  .new-card__mark {
+    top: 8px;
+    right: 8px;
+  }
+
+  .new-card__mark_active {
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .new-card__image {
+    width: 224px;
+    height: 150px;
+  }
+  .new-card__title {
+    font-size: 22px;
+  }
+
+  .new-card__remind-window {
+    right: 55px;
+    width: 100px;
+    font-weight: 500;
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .new-card__image {
+    width: 100%;
+    height: 272px;
+  }
+  .new-card__title {
+    font-size: 22px;
+  }
+  .new-card__mark {
+    top: 18px;
+    right: 15px;
+  }
+
+  .new-card__mark_active {
+    top: 18px;
+    right: 15px;
+  }
+  .new-card__remind-window {
+    height: 40px;
+    top: 18px;
+    right: 60px;
+    width: auto;
+    font-size: 12px;
+    line-height: 12px;
+  }
 }

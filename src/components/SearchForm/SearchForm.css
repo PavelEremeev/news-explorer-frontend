@@ -70,3 +70,28 @@
   transform: scale(1.02);
   color: rgba(255, 255, 255, 0.5);
 }
+
+@media screen and (max-width: 768px) {
+  .search__title {
+    font-size: 36px;
+    line-height: 40px;
+    width: 400px;
+    padding-right: 92px;
+    text-align: left;
+  }
+
+  .search__subtitle {
+    max-width: 452px;
+    padding-right: 45px;
+  }
+
+  .search__input {
+    width: 448px;
+    height: 56px;
+  }
+
+  .search__button {
+    width: 160px;
+    height: 59px;
+  }
+}

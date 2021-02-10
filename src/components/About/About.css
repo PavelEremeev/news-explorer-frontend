@@ -37,3 +37,52 @@
   line-height: 24px;
   margin-top: 24px;
 }
+
+@media screen and (max-width: 1280px) {
+  .about__avatar {
+    height: 400px;
+    width: 400px;
+    margin-left: 40px;
+  }
+
+  .about__container {
+    margin-top: 95px;
+    margin-right: 40px;
+    margin-bottom: 93px;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .about__avatar {
+    height: 232px;
+    width: 232px;
+    margin-left: 40px;
+  }
+  .about__title {
+    font-size: 30px;
+    line-height: 40px;
+  }
+  .about__container {
+    margin-top: 45px;
+    margin-right: 40px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .about {
+    flex-direction: column;
+  }
+
+  .about__avatar {
+    height: 272px;
+    width: 272px;
+    margin: 32px auto 24px;
+  }
+  .about__title {
+    font-size: 30px;
+    line-height: 40px;
+  }
+  .about__container {
+    margin: 0 auto 65px;
+  }
+}

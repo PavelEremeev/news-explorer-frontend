@@ -4,6 +4,7 @@ import "../PopupWithForm/PopupWithForm.css";
 
 export default function InfoPopup({ isOpen, onClose, switchPopup, onCloseOverlay, popupTitle, linkText }) {
 
+
     return (
         <section className={isOpen ? `popup popup_opened` : `popup`} onClick={onCloseOverlay}>
             <div className="popup__container">

@@ -135,3 +135,45 @@
 
 .header__container-login {
 }
+
+@media screen and (max-width: 1280px) {
+  .header__container {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+
+  .header__border {
+    right: 458px;
+  }
+
+  .header__border-login {
+    right: 182px;
+  }
+
+  .header__button-image {
+    right: 55px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header__link {
+    font-size: 16px;
+  }
+  .header__button {
+    font-size: 16px;
+    width: 152px;
+    height: 40px;
+  }
+  .header__button-login {
+    width: 100px;
+    height: 40px;
+  }
+  .header__border-login {
+    right: 176px;
+    width: 157px;
+  }
+  .header__border {
+    width: 60px;
+    right: 413px;
+  }
+}

@@ -9,6 +9,8 @@ import SavedNewsHeader from '../SavedNewsHeader/SavedNewsHeader';
 import Footer from '../Footer/Footer';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import InfoPopup from '../InfoPopup/InfoPopup';
+import Preloader from '../Preloader/Preloader';
+import NoNewsFound from '../NoNewsFound/NoNewsFound'
 
 function App() {
   const history = useHistory();
@@ -18,6 +20,8 @@ function App() {
   const [isSigninPopupOpened, setSigninPopupOpened] = useState(false)
   const [isSignupPopupOpened, setSignupPopupOpened] = useState(false)
   const [isInfoPopupOpened, setInfoPopupOpened] = useState(false)
+
+
 
   function handleSigninPopup() {
     setSigninPopupOpened(true)
@@ -57,16 +61,26 @@ function App() {
     closeAllPopups()
     handleSigninPopup()
   }
+  //Логин сабмит
 
   function submitSigninPopup() {
     toggleLoggedIn()
   }
+
+  //Регистрация сабмит
+
+  function submitSignupPopup() {
+    handleInfoPopup()
+  }
+
 
   return (
     <div className="App">
       <Header onSignOut={signOut} isOpen={handleSigninPopup} />
       <Route exact path="/">
         <SearchForm />
+        <Preloader testing={false} />
+        <NoNewsFound testing={false} />
         <NewsCardList
           status="searchNews"
           isLoggedIn={isLoggedIn} />
@@ -90,11 +104,27 @@ function App() {
       />
       <InfoPopup
         onClose={closeAllPopups}
-        popupTitle="Пользователь успешно зарегистрирован"
+        popupTitle="Пользователь успешно зарегистрирован!"
         isOpen={isInfoPopupOpened}
         linkText="Войти"
         switchPopup={changeToSigninPopup}
       />
+      <PopupWithForm
+        onClose={closeAllPopups}
+        popupTitle="Регистрация"
+        isOpen={isSignupPopupOpened}
+        buttonText="Зарегистрироваться"
+        linkText="Войти"
+        switchPopup={changeToSigninPopup}
+        onSubmit={submitSignupPopup}
+      >
+        <p className="popup__subtitle">Имя</p>
+        <input ref={nameInput}
+          type="name"
+          name="name"
+          placeholder="Введите своё имя"
+          className="popup__input" />
+      </PopupWithForm>
     </div>
   );
 }
