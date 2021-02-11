@@ -52,6 +52,12 @@
   transition: ease-in 0.3s all;
 }
 
+.header__button-mobile {
+}
+
+.header__button-mobile_active {
+}
+
 .header__button:hover {
   transition: ease-in 0.3s all;
   border: 1px solid #2f71e5;
@@ -97,13 +103,18 @@
   color: black;
 }
 
-.header__menu {
+.header__menu-desktop {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-.header__menu_open {
+.header__menu {
+  display: none;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid #545454;
 }
 
 .header__button-container {
@@ -134,6 +145,21 @@
 }
 
 .header__container-login {
+}
+
+.header__button-wrapper {
+  width: 30px;
+  height: 30px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  /* margin: 20px; */
+}
+
+.header__button-wrapper:hover {
+  opacity: 0.7;
+  transition: linear 0.3s all;
 }
 
 @media screen and (max-width: 1280px) {
@@ -175,5 +201,157 @@
   .header__border {
     width: 60px;
     right: 413px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .header {
+    border-bottom: none;
+    height: 56px;
+  }
+
+  .header__logo {
+    margin: 16px 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .header__container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .header__link {
+    margin: 16px auto 0 16px;
+  }
+
+  .header__menu-desktop {
+    display: none;
+  }
+
+  .header__border {
+    display: none;
+  }
+
+  .header__border-login {
+    display: none;
+  }
+
+  .header__menu_open {
+    display: flex;
+    text-align: left;
+    align-items: baseline;
+  }
+
+  .header__button-image {
+    right: 0;
+    top: 99px;
+    left: 95px;
+  }
+
+  .header__button-login.header__button {
+    margin: 16px auto 16px 0;
+  }
+
+  .header__button {
+    margin: 16px auto 16px 16px;
+  }
+
+  .header__button-container {
+    margin: 16px auto 16px 16px;
+  }
+
+  .header__button-mobile-login {
+    background-color: black;
+  }
+
+  .header__button-mobile {
+    position: relative;
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  .header__button-mobile-login {
+    position: relative;
+    width: 30px;
+    height: 3px;
+    background-color: black;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .header__button-mobile-login::before {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: black;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+  }
+
+  .header__button-mobile-login::after {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: black;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+  }
+
+  .header__button-mobile::before {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+  }
+
+  .header__button-mobile::after {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    content: "";
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
+  }
+
+  .header__button-mobile_active {
+    background-color: transparent;
+  }
+
+  .header__button-mobile_active::before {
+    transform: rotate(45deg);
+    top: 0;
+    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
+  }
+
+  .header__button-mobile_active::after {
+    transform: rotate(-45deg);
+    top: 0;
+    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
+  }
+  .header__button-wrapper {
+    display: flex;
+    transition: linear 0.3s all;
   }
 }

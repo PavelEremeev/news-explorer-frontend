@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import './App.css';
 import Header from '../Header/Header.js';
 import About from "../About/About.js"
@@ -20,7 +20,13 @@ function App() {
   const [isSigninPopupOpened, setSigninPopupOpened] = useState(false)
   const [isSignupPopupOpened, setSignupPopupOpened] = useState(false)
   const [isInfoPopupOpened, setInfoPopupOpened] = useState(false)
+  const [isHeaderMenuOpen, setHeaderMenuOpen] = useState(false)
 
+
+  const handleHeaderMenu =
+    useCallback(() =>
+      setHeaderMenuOpen(prev => !prev),
+      [setHeaderMenuOpen]);
 
 
   function handleSigninPopup() {
@@ -74,9 +80,24 @@ function App() {
   }
 
 
+  const handleСloseOnEsc =
+    useCallback((evt) => {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }, []);
+
+  useEffect(() => {
+    document.addEventListener('keyup', handleСloseOnEsc, false);
+    return () => {
+      document.removeEventListener('keyup', handleСloseOnEsc, false);
+    };
+  }, [handleСloseOnEsc])
+
+
   return (
     <div className="App">
-      <Header onSignOut={signOut} isOpen={handleSigninPopup} />
+      <Header onSignOut={signOut} isOpen={handleSigninPopup} onClickMenu={isHeaderMenuOpen} onChangeHeaderMenu={handleHeaderMenu} />
       <Route exact path="/">
         <SearchForm />
         <Preloader testing={false} />
@@ -95,6 +116,7 @@ function App() {
       <Footer />
       <PopupWithForm
         onClose={closeAllPopups}
+        onCloseOverlay={closeAllPopups}
         popupTitle="Вход"
         isOpen={isSigninPopupOpened}
         buttonText="Войти"
@@ -104,6 +126,7 @@ function App() {
       />
       <InfoPopup
         onClose={closeAllPopups}
+        onCloseOverlay={closeAllPopups}
         popupTitle="Пользователь успешно зарегистрирован!"
         isOpen={isInfoPopupOpened}
         linkText="Войти"
@@ -111,6 +134,7 @@ function App() {
       />
       <PopupWithForm
         onClose={closeAllPopups}
+        onCloseOverlay={closeAllPopups}
         popupTitle="Регистрация"
         isOpen={isSignupPopupOpened}
         buttonText="Зарегистрироваться"

@@ -8,6 +8,13 @@ export default function PopupWithForm({ isOpen, onSubmit, onClose, children, onC
     const emailInput = useRef()
     const passInput = useRef()
 
+    function closePopupOnOverlay(evt) {
+        if (evt.target === evt.currentTarget) {
+            onCloseOverlay()
+        }
+    }
+
+
     // временное решение сабмита
     function handleSubmit(evt) {
         evt.preventDefault()
@@ -18,7 +25,7 @@ export default function PopupWithForm({ isOpen, onSubmit, onClose, children, onC
     }
 
     return (
-        <section className={isOpen ? `popup popup_opened` : `popup`} onClick={onCloseOverlay}>
+        <section className={isOpen ? `popup popup_opened` : `popup`} onClick={closePopupOnOverlay}>
             <form className="popup__container" onSubmit={handleSubmit} action="#" noValidate>
                 <button onClick={onClose}
                     className="popup__close-button"
