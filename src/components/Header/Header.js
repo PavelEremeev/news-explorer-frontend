@@ -18,12 +18,13 @@ export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu
                         <div className="header__button-wrapper" onClick={onChangeHeaderMenu}>
                             <button className={`header__button-mobile ${onClickMenu ? `header__button-mobile_active` : ""}`} /></div>
                         <div className="header__menu-desktop">
-                            <Link to="/" className="header__link">Главная</Link>
+                            <Link to="/" className="header__link header__link-border">Главная
+                            <div className="header__border" />
+                            </Link>
                             <Link to="/saved-news" className="header__link">Сохранённые статьи</Link>
                             <button className="header__button" onClick={isOpen}>Авторизоваться</button>
                         </div>
                     </div>
-                    <div className="header__border" />
                     <div className={`header__menu ${onClickMenu ? `header__menu_open` : ""}`}>
                         <Link to="/" className="header__link">Главная</Link>
                         <Link to="/saved-news" className="header__link">Сохранённые статьи</Link>
@@ -39,19 +40,21 @@ export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu
                             <button className={`header__button-mobile-login ${onClickMenu ? `header__button-mobile_active` : ""}`} /></div>
                         <div className="header__menu-desktop">
                             <Link to="/" className="header__link header__link-login">Главная</Link>
-                            <Link to="/saved-news" className="header__link header__link-login">Сохранённые статьи</Link>
-                            <div className="header__button-container">
-                                <Link to="/" onClick={onSignOut} className="header__button header__button-login">Павел</Link>
+                            <Link to="/saved-news" className="header__link header__link-login header__link-border">Сохранённые статьи
+                            <div className="header__border header__border-login" />
+                            </Link>
+                            <div className="header__button header__button-login">
+                                <Link to="/" onClick={onSignOut} className="header__login">Павел</Link>
                                 <div className="header__button-image" />
                             </div>
                         </div>
                     </div>
-                    <div className="header__border-login" />
+
                     <div className={`header__menu ${onClickMenu ? `header__menu_open` : ""}`}>
                         <Link to="/" className="header__link header__link-login">Главная</Link>
                         <Link to="/saved-news" className="header__link header__link-login">Сохранённые статьи</Link>
-                        <div className="header__button-container">
-                            <Link to="/" onClick={onSignOut} className="header__button header__button-login">Павел</Link>
+                        <div className="header__button header__button-login">
+                            <Link to="/" onClick={onSignOut} className="header__login">Павел</Link>
                             <div className="header__button-image" />
                         </div>
                     </div>

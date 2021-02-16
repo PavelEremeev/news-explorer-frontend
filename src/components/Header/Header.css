@@ -52,12 +52,6 @@
   transition: ease-in 0.3s all;
 }
 
-.header__button-mobile {
-}
-
-.header__button-mobile_active {
-}
-
 .header__button:hover {
   transition: ease-in 0.3s all;
   border: 1px solid #2f71e5;
@@ -73,7 +67,6 @@
   line-height: 24px;
   margin-right: 32px;
   transition: ease-in 0.3s all;
-  position: relative;
 }
 
 .header__link:hover {
@@ -83,16 +76,11 @@
 
 .header__border {
   border-bottom: white solid 3px;
-  width: 68px;
-  position: absolute;
-  right: 523px;
+  height: 26px;
 }
 
 .header__border-login {
   border-bottom: black solid 3px;
-  width: 176px;
-  position: absolute;
-  right: 246px;
 }
 
 .header__logo-login {
@@ -101,6 +89,29 @@
 
 .header__link-login {
   color: black;
+}
+
+.header__link-border.header__link-login {
+  padding-top: 29px;
+}
+
+.header__link-border {
+  padding-top: 29px;
+}
+
+.header__login {
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  color: black;
+  font-size: 18px;
+  line-height: 24px;
+  margin-left: 15px;
+  transition: ease-in 0.3s all;
+  max-width: 150px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .header__menu-desktop {
@@ -124,27 +135,27 @@
 .header__button-login {
   border: 1px solid black;
   color: black;
-  position: relative;
-  padding-top: 8px;
-  padding-left: 15px;
-  padding-bottom: 8px;
-  padding-right: 40px;
+  /* position: relative; */
+  /* padding-top: 8px; */
+  /* padding-left: 15px; */
+  /* padding-bottom: 8px; */
+  /* padding-right: 40px; */
   text-decoration: none;
   transition: ease-in 0.3s all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: auto;
 }
 
 .header__button-image {
-  right: 120px;
-  top: 33px;
-  position: absolute;
+  margin: 13px;
   background: url(../../images/exit.svg);
   height: 16px;
   width: 16px;
   background-size: cover;
   background-position: center;
-}
-
-.header__container-login {
 }
 
 .header__button-wrapper {
@@ -167,25 +178,18 @@
     margin-left: 40px;
     margin-right: 40px;
   }
-
-  .header__border {
-    right: 458px;
-  }
-
-  .header__border-login {
-    right: 182px;
-  }
-
-  .header__button-image {
-    right: 55px;
-  }
 }
 
 @media screen and (max-width: 768px) {
   .header__link {
     font-size: 16px;
   }
-  .header__button {
+  .header__login {
+    font-size: 16px;
+    max-width: 60px;
+  }
+
+  /* .header__button {
     font-size: 16px;
     width: 152px;
     height: 40px;
@@ -193,15 +197,7 @@
   .header__button-login {
     width: 100px;
     height: 40px;
-  }
-  .header__border-login {
-    right: 176px;
-    width: 157px;
-  }
-  .header__border {
-    width: 60px;
-    right: 413px;
-  }
+  } */
 }
 
 @media screen and (max-width: 650px) {
@@ -214,6 +210,10 @@
     margin: 16px 0;
     font-size: 16px;
     line-height: 24px;
+  }
+
+  .header__login {
+    max-width: 200px;
   }
 
   .header__container {
@@ -250,10 +250,6 @@
     right: 0;
     top: 99px;
     left: 95px;
-  }
-
-  .header__button-login.header__button {
-    margin: 16px auto 16px 0;
   }
 
   .header__button {
