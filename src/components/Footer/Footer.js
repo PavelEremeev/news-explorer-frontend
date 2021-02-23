@@ -20,8 +20,8 @@ export default function Footer() {
                     <a href="https://praktikum.yandex.ru" className="footer__link" rel="noreferrer" target="_blank">Яндекс.Практикум</a>
                 </div>
                 <div className="footer__social-container">
-                    <a href="https://github.com/PavelEremeev" className="footer__social-link" rel="noreferrer" target="_blank"><img className="footer__social-icon" src={githubIcon} /></a>
-                    <a href="https://t.me/kermit_kvebit" className="footer__social-link" rel="noreferrer" target="_blank"><img className="footer__social-icon" src={telegramIcon} /></a>
+                    <a href="https://github.com/PavelEremeev" className="footer__social-link" rel="noreferrer" target="_blank"><img alt="github.pic" className="footer__social-icon" src={githubIcon} /></a>
+                    <a href="https://t.me/kermit_kvebit" className="footer__social-link" rel="noreferrer" target="_blank"><img alt="telegram.pic" className="footer__social-icon" src={telegramIcon} /></a>
                 </div>
             </div>
         </footer>

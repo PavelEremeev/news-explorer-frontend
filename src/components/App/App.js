@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./App.css";
 import Header from "../Header/Header";
 import About from "../About/About"
@@ -13,24 +13,33 @@ import Preloader from "../Preloader/Preloader";
 import NoNewsFound from "../NoNewsFound/NoNewsFound";
 import CurrentUserContext from "../../contexts/CurrentUserContext"
 
+import { newsApi } from "../../utils/NewsApi"
 import { mainApi } from "../../utils/MainApi"
 import * as NewsExplorerAuth from "../../utils/NewsExplorerAuth";
 import { getToken, setToken, removeToken } from "../../utils/token";
+import Login from "../Login/Login";
+import Register from "../Register/Register";
 
 function App() {
   const history = useHistory();
-  const nameInput = useRef();
-  // state popup hooks
-  const [isSigninPopupOpened, setSigninPopupOpened] = useState(false)
-  const [isSignupPopupOpened, setSignupPopupOpened] = useState(false)
-  const [isInfoPopupOpened, setInfoPopupOpened] = useState(false)
-  const [isHeaderMenuOpen, setHeaderMenuOpen] = useState(false)
 
-  const [currentUser, setCurrentUser] = useState({})
-  const [savedArticles, setSavedArticles] = useState([]);
+  // state popup hooks
+  const [isSigninPopupOpened, setSigninPopupOpened] = useState(false);
+  const [isSignupPopupOpened, setSignupPopupOpened] = useState(false);
+  const [isInfoPopupOpened, setInfoPopupOpened] = useState(false);
+  const [isHeaderMenuOpen, setHeaderMenuOpen] = useState(false);
+
+  const [isCurrentUser, setCurrentUser] = useState({});
+  const [isSavedArticles, setSavedArticles] = useState([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [isWaitResponse, setWaitResponse] = useState(false)
-  const [isApiErrorText, setApiErrorText] = useState('')
+  const [isWaitResponse, setWaitResponse] = useState(false);
+  const [isApiErrorText, setApiErrorText] = useState("");
+  const [isKeyword, setKeyword] = useState("");
+  const [isSearching, setSearching] = useState(false);
+  const [isNoResults, setResults] = useState(false);
+  const [isServerError, setServerError] = useState(false);
+  const [isFoundArticles, setFoundArticles] = useState([]);
+
 
 
   function generateIdCard() {
@@ -63,6 +72,7 @@ function App() {
     setSignupPopupOpened(false)
     setInfoPopupOpened(false)
     setApiErrorText('')
+
   }
   // switch from one popup to another
   function changeToSignupPopup() {
@@ -178,62 +188,64 @@ function App() {
     };
   }, [handleСloseOnEsc])
 
+  useEffect(() => {
+
+    tokenCheck();
+  }, []);
 
   return (
-    <div className="App">
-      <Header onSignOut={signOut} isOpen={handleSigninPopup} onClickMenu={isHeaderMenuOpen} onChangeHeaderMenu={handleHeaderMenu} />
-      <Route exact path="/">
-        <SearchForm />
-        <Preloader testing={false} />
-        <NoNewsFound testing={false} />
-        <NewsCardList
-          status="searchNews"
-          isLoggedIn={isLoggedIn} />
-        <About />
-      </Route>
-      <Route path="/saved-news">
-        <SavedNewsHeader />
-        <NewsCardList
-          status="savedNews"
-          isLoggedIn={isLoggedIn} />
-      </Route>
-      <Footer />
-      <PopupWithForm
-        onClose={closeAllPopups}
-        onCloseOverlay={closeAllPopups}
-        popupTitle="Вход"
-        isOpen={isSigninPopupOpened}
-        buttonText="Войти"
-        linkText="Зарегистрироваться"
-        switchPopup={changeToSignupPopup}
-        onSubmit={submitSigninPopup}
-      />
-      <InfoPopup
-        onClose={closeAllPopups}
-        onCloseOverlay={closeAllPopups}
-        popupTitle="Пользователь успешно зарегистрирован!"
-        isOpen={isInfoPopupOpened}
-        linkText="Войти"
-        switchPopup={changeToSigninPopup}
-      />
-      <PopupWithForm
-        onClose={closeAllPopups}
-        onCloseOverlay={closeAllPopups}
-        popupTitle="Регистрация"
-        isOpen={isSignupPopupOpened}
-        buttonText="Зарегистрироваться"
-        linkText="Войти"
-        switchPopup={changeToSigninPopup}
-        onSubmit={submitSignupPopup}
-      >
-        <p className="popup__subtitle">Имя</p>
-        <input ref={nameInput}
-          type="name"
-          name="name"
-          placeholder="Введите своё имя"
-          className="popup__input" />
-      </PopupWithForm>
-    </div>
+    <CurrentUserContext.Provider value={isCurrentUser}>
+      <div className="App">
+        <Header onSignOut={signOut} isOpen={handleSigninPopup} onClickMenu={isHeaderMenuOpen} onChangeHeaderMenu={handleHeaderMenu} isLoggedIn={isLoggedIn} />
+        <Route exact path="/">
+          <SearchForm />
+          <Preloader testing={false} />
+          <NoNewsFound testing={false} />
+          <NewsCardList
+            status="searchNews"
+            isLoggedIn={isLoggedIn} />
+          <About />
+        </Route>
+        <Route path="/saved-news">
+          <SavedNewsHeader />
+          <NewsCardList
+            status="savedNews"
+            isLoggedIn={isLoggedIn} />
+        </Route>
+        <Footer />
+        <Login
+          onClose={closeAllPopups}
+          onCloseOverlay={closeAllPopups}
+          popupTitle="Вход"
+          isOpen={isSigninPopupOpened}
+          linkText="Зарегистрироваться"
+          switchPopup={changeToSignupPopup}
+          onSubmit={submitSigninPopup}
+          auth={handleUserLogin}
+          apiErrorText={isApiErrorText}
+        />
+        <InfoPopup
+          onClose={closeAllPopups}
+          onCloseOverlay={closeAllPopups}
+          popupTitle="Пользователь успешно зарегистрирован!"
+          isOpen={isInfoPopupOpened}
+          linkText="Войти"
+          switchPopup={changeToSigninPopup}
+        />
+        <Register
+          onClose={closeAllPopups}
+          onCloseOverlay={closeAllPopups}
+          popupTitle="Регистрация"
+          isOpen={isSignupPopupOpened}
+          buttonText="Зарегистрироваться"
+          linkText="Войти"
+          switchPopup={changeToSigninPopup}
+          onSubmit={submitSignupPopup}
+          auth={handleUserRegister}
+          apiErrorText={isApiErrorText}
+        />
+      </div>
+    </CurrentUserContext.Provider >
   );
 }
 

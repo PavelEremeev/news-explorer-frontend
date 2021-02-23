@@ -91,7 +91,32 @@
 }
 
 .popup__error-text {
+  width: 83%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ff0000;
 }
+
+.popup__input-error {
+  width: 83%;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ff0000;
+  text-align: center;
+}
+
+.popup__submit-button_disabled.popup__submit-button {
+  background-color: rgb(230, 232, 235);
+  color: rgb(182, 188, 191);
+}
+
+.popup__submit-button_disabled:hover.popup__submit-button {
+  background-color: rgb(230, 232, 235);
+  color: rgb(182, 188, 191);
+}
+
 .popup__submit-button {
   font-family: "Roboto Regular";
   font-size: 18px;

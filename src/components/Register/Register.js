@@ -3,15 +3,15 @@ import { useInput } from "../../utils/Validator"
 import "../PopupWithForm/PopupWithForm.css";
 import PopupWithForm from "../PopupWithForm/PopupWithForm"
 
-export default function Login({ isOpen, onClose, onCloseOverlay, apiErrorText, popupTitle, linkText, switchPopup, auth }) {
+export default function Register({ isOpen, onClose, onCloseOverlay, apiErrorText, popupTitle, linkText, switchPopup, auth }) {
 
-    const email = useInput("", { isEmpty: true, isEmail: true, maxLength: 40 })
-    const password = useInput("", { isEmpty: true, minLength: 6 });
+    const userName = useInput('', { isEmpty: true, minLength: 2, maxLength: 40 })
+    const password = useInput('', { isEmpty: true, minLength: 6 })
+    const email = useInput('', { isEmpty: true, isEmail: true, maxLength: 40 })
 
-    function handleSubmit(evt) {
-        auth(email.value, password.value)
+    const handleSubmit = (evt) => {
+        auth(userName.value, email.value, password.value)
     }
-
 
     return (
         <PopupWithForm
@@ -43,16 +43,26 @@ export default function Login({ isOpen, onClose, onCloseOverlay, apiErrorText, p
                 className="popup__input" />
             {(password.isDirty && password.isEmpty) && <span className='popup__input-error'>Поле обязательно для заполнения</span>}
             {(password.isDirty && password.minLengthError) && <span className='popup__input-error'>Минимальная длина: 6 символов</span>}
+            <p className="popup__subtitle">Имя</p>
+            <input
+                onChange={userName.onChange}
+                onBlur={userName.onBlur}
+                type="name"
+                name="name"
+                placeholder="Введите своё имя"
+                className="popup__input" />
+            {(userName.isDirty && userName.isEmpty) && <span className='popup__input-error'>Поле обязательно для заполнения</span>}
+            {(userName.isDirty && userName.minLengthError) && <span className='popup__input-error'>Минимальная длина: 2 символа</span>}
+            {(userName.isDirty && userName.maxLengthError) && <span className='popup__input-error'>Максимальная длина: 40 символов</span>}
             <span className="popup__error-text">{apiErrorText}</span>
             <button
-                disabled={!email.inputValid || !password.inputValid}
+                disabled={!email.inputValid || !password.inputValid || !userName.inputValid}
                 type="submit"
                 id="submit"
-                className={(email.inputValid && password.inputValid)
+                className={(email.inputValid && password.inputValid && userName.inputValid)
                     ? `popup__submit-button`
                     : `popup__submit-button popup__submit-button_disabled`}>
                 Войти</button>
         </PopupWithForm>
-
     )
 }
