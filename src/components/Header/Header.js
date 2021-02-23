@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, Route, Switch } from 'react-router-dom'
 import "./Header.css";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 
 
-export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu, onClickMenu }) {
+export default function Header({ isOpen, onSignOut, onChangeHeaderMenu, onClickMenu, isLoggedIn }) {
+
+    const currentUser = useContext(CurrentUserContext);
 
 
 
@@ -21,18 +24,24 @@ export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu
                             <Link to="/" className="header__link header__link-border">Главная
                             <div className="header__border" />
                             </Link>
-                            <Link to="/saved-news" className="header__link">Сохранённые статьи</Link>
-                            <button className="header__button" onClick={isOpen}>Авторизоваться</button>
+                            {isLoggedIn ? <Link to="/saved-news" className="header__link">Сохранённые статьи</Link> : ""}
+                            {isLoggedIn ? <div className="header__button header__button-login">
+                                <Link to="/" onClick={onSignOut} className="header__login">{currentUser.name}</Link>
+                                <div className="header__button-image" />
+                            </div> : <button className="header__button" onClick={isOpen}>Авторизоваться</button>}
                         </div>
                     </div>
                     <div className={`header__menu ${onClickMenu ? `header__menu_open` : ""}`}>
                         <Link to="/" className="header__link">Главная</Link>
-                        <Link to="/saved-news" className="header__link">Сохранённые статьи</Link>
-                        <button className="header__button" onClick={isOpen}>Авторизоваться</button>
+                        {isLoggedIn ? <Link to="/saved-news" className="header__link">Сохранённые статьи</Link> : ""}
+                        {isLoggedIn ? <div className="header__button header__button-login">
+                            <Link to="/" onClick={onSignOut} className="header__login">{currentUser.name}</Link>
+                            <div className="header__button-image" />
+                        </div> : <button className="header__button" onClick={isOpen}>Авторизоваться</button>}
                     </div>
                 </header>
             </Route>
-            <Route exact path="/saved-news">
+            <Route path="/saved-news">
                 <header className="header">
                     <div className="header__container header__container-login">
                         <h3 className="header__logo header__logo-login">NewsExplorer</h3>
@@ -44,7 +53,7 @@ export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu
                             <div className="header__border header__border-login" />
                             </Link>
                             <div className="header__button header__button-login">
-                                <Link to="/" onClick={onSignOut} className="header__login">Павел</Link>
+                                <Link to="/" onClick={onSignOut} className="header__login">{currentUser}</Link>
                                 <div className="header__button-image" />
                             </div>
                         </div>
@@ -54,7 +63,7 @@ export default function Header({ userName, isOpen, onSignOut, onChangeHeaderMenu
                         <Link to="/" className="header__link header__link-login">Главная</Link>
                         <Link to="/saved-news" className="header__link header__link-login">Сохранённые статьи</Link>
                         <div className="header__button header__button-login">
-                            <Link to="/" onClick={onSignOut} className="header__login">Павел</Link>
+                            <Link to="/" onClick={onSignOut} className="header__login">{currentUser}</Link>
                             <div className="header__button-image" />
                         </div>
                     </div>
