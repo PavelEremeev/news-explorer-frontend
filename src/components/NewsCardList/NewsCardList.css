@@ -6,8 +6,9 @@
   font-family: "Roboto Medium";
   align-items: center;
 }
-
-/* чет я совсем запарился тут */
+.new-cardlist_closed.new-cardlist {
+  display: none;
+}
 
 .new-cardlist__results-title {
   font-family: Robotoslab;

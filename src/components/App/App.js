@@ -7,7 +7,6 @@ import { Route, useHistory } from "react-router-dom";
 import SearchForm from "../SearchForm/SearchForm";
 import SavedNewsHeader from "../SavedNewsHeader/SavedNewsHeader";
 import Footer from "../Footer/Footer";
-import PopupWithForm from "../PopupWithForm/PopupWithForm";
 import InfoPopup from "../InfoPopup/InfoPopup";
 import Preloader from "../Preloader/Preloader";
 import NoNewsFound from "../NoNewsFound/NoNewsFound";
@@ -19,6 +18,8 @@ import * as NewsExplorerAuth from "../../utils/NewsExplorerAuth";
 import { getToken, setToken, removeToken } from "../../utils/token";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
+
+
 
 function App() {
   const history = useHistory();
@@ -36,7 +37,8 @@ function App() {
   const [isApiErrorText, setApiErrorText] = useState("");
   const [isKeyword, setKeyword] = useState("");
   const [isSearching, setSearching] = useState(false);
-  const [isNoResults, setResults] = useState(false);
+  const [isNoResults, setNoResults] = useState(false);
+  const [isHaveResults, setHaveResults] = useState(false);
   const [isServerError, setServerError] = useState(false);
   const [isFoundArticles, setFoundArticles] = useState([]);
 
@@ -102,12 +104,14 @@ function App() {
     handleInfoPopup()
   }
 
+  // registration and authorization
+
   function handleUserRegister(name, email, password) {
     setWaitResponse(true)
     NewsExplorerAuth.register(name, email, password)
       .then((res) => {
         setWaitResponse(false)
-        if (res.status === 200) {
+        if (res.status(200)) {
           changeToInfoPopup()
         } else {
           res.json()
@@ -167,6 +171,7 @@ function App() {
   }
 
 
+
   function signOut() {
     removeToken()
     localStorage.clear()
@@ -176,10 +181,100 @@ function App() {
 
   const handleСloseOnEsc =
     useCallback((evt) => {
-      if (evt.key === 'Escape') {
+      if (evt.key === "Escape") {
         closeAllPopups();
       }
     }, []);
+
+  // searching news
+
+  function handleSearchWord(a) {
+    const wordInput = a.searchWord;
+    setKeyword(wordInput)
+    localStorage.removeItem("keyword");
+    localStorage.setItem("keyword", JSON.stringify(wordInput))
+    setHaveResults(false)
+    setNoResults(false)
+    setSearching(true)
+    setServerError(false)
+    newsApi.getNewsCardList(wordInput)
+      .then((res) => {
+        if (res.totalResults !== 0) {
+          setSearching(false)
+          setHaveResults(true)
+
+          const foundData = res.articles;
+          foundData.forEach((data) => {
+            data.isSaved = false
+            data.isId = generateIdCard();
+          })
+          localStorage.removeItem("foundData")
+          localStorage.setItem("foundData", JSON.stringify(foundData))
+
+          const foundDataLocal = JSON.parse(localStorage.getItem("foundData"))
+          setFoundArticles(foundDataLocal)
+        } else {
+          setSearching(false)
+          setNoResults(true)
+        }
+      })
+      .catch((err) => {
+        setSearching(false)
+        setServerError(true)
+        console.log(err)
+      });
+  }
+
+  // saving news
+
+  function handleSaveClick(card) {
+    mainApi.createCard({
+      keyword: isKeyword,
+      title: card.title,
+      text: card.description,
+      date: card.publishedAt,
+      source: card.source.name,
+      link: card.url,
+      image: card.urlToImage,
+    }).then((newCard) => {
+      card._id = newCard._id;
+      card.isSaved = true;
+
+      const newFoundArticles = isFoundArticles.map((c) => c.isId === card.isId ? card : c)
+      localStorage.remove("foundData")
+      localStorage.setItem("foundData", JSON.stringify(newFoundArticles))
+
+      const foundDataLocal = JSON.parse(localStorage.getItem("foundData"))
+      setFoundArticles(foundDataLocal)
+      setSavedArticles([...isSavedArticles, newCard])
+    }).catch((err) => { console.log(err) })
+  }
+
+  // deleting news
+
+  function handleRemoveClick(card) {
+    mainApi.deleteCard(card._id)
+      .then((newCard) => {
+        card.isSaved = false;
+        const newCards = isSavedArticles.filter((c) => c._id !== card._id);
+        setSavedArticles(newCards);
+
+        const newFoundArticles = isFoundArticles.map((c) => c.isId === card.isId ? card : c)
+        localStorage.removeItem("foundData")
+        localStorage.setItem("foundData", JSON.stringify(newFoundArticles))
+
+        const foundDataLocal = JSON.parse(localStorage.getItem("foundData"))
+        setFoundArticles(foundDataLocal)
+      }).catch((err) => console.loge(err))
+  }
+
+  function keywordsArray() {
+    const key = isSavedArticles.map((card) => card.keyword)
+    return key.sort().filter(function (card, pos, ary) {
+      return !pos || card !== ary[pos - 1];
+    });
+  }
+
 
   useEffect(() => {
     document.addEventListener('keyup', handleСloseOnEsc, false);
@@ -189,28 +284,62 @@ function App() {
   }, [handleСloseOnEsc])
 
   useEffect(() => {
-
     tokenCheck();
   }, []);
+
+
+  useEffect(() => {
+    const foundDataLocal = JSON.parse(localStorage.getItem("foundData"))
+    const word = JSON.parse(localStorage.getItem("isKeyword"))
+    if (foundDataLocal !== null) {
+      setFoundArticles(foundDataLocal)
+      setKeyword(word)
+      setHaveResults(true)
+    }
+    mainApi.getInitialInfo().then(
+      (res) => {
+        const items = res[1]
+        setSavedArticles(items)
+      }).catch((err) => {
+        console.log(err);
+        setLoggedIn(false)
+      });
+  }, [])
 
   return (
     <CurrentUserContext.Provider value={isCurrentUser}>
       <div className="App">
-        <Header onSignOut={signOut} isOpen={handleSigninPopup} onClickMenu={isHeaderMenuOpen} onChangeHeaderMenu={handleHeaderMenu} isLoggedIn={isLoggedIn} />
+        <Header
+          onSignOut={signOut}
+          isOpen={handleSigninPopup}
+          onClickMenu={isHeaderMenuOpen}
+          onChangeHeaderMenu={handleHeaderMenu}
+          isLoggedIn={isLoggedIn} />
         <Route exact path="/">
-          <SearchForm />
-          <Preloader testing={false} />
-          <NoNewsFound testing={false} />
+          <SearchForm onSearch={handleSearchWord} />
+          <Preloader
+            onSearch={isSearching}
+            onRequest={isWaitResponse} />
+          <NoNewsFound onSearch={isNoResults} />
           <NewsCardList
             status="searchNews"
-            isLoggedIn={isLoggedIn} />
+            onSearch={isHaveResults}
+            initialArticles={isFoundArticles}
+            onCardSave={handleSaveClick}
+            onCardRemove={handleRemoveClick}
+            isOpen={handleSignupPopup}
+            isKeyword={isKeyword}
+            isLoggedIn={isLoggedIn}
+          />
           <About />
         </Route>
         <Route path="/saved-news">
           <SavedNewsHeader />
           <NewsCardList
             status="savedNews"
-            isLoggedIn={isLoggedIn} />
+            isLoggedIn={isLoggedIn}
+            savedArticles={isSavedArticles}
+            initialArticles={isFoundArticles} />
         </Route>
         <Footer />
         <Login

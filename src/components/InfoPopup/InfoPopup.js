@@ -14,7 +14,7 @@ export default function InfoPopup({ isOpen, onClose, switchPopup, onCloseOverlay
             <div className="popup__container">
                 <button className="popup__close-button" type="button" onClose={onClose} />
                 <h2 className="popup__title">{popupTitle}</h2>
-                <Link className="popup__link" onClick={switchPopup}>{linkText}</Link>
+                <Link to='/' className="popup__link" onClick={switchPopup}>{linkText}</Link>
             </div>
         </section>
     )

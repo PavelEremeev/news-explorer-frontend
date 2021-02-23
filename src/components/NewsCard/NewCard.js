@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import moment from 'moment';
+import 'moment/locale/ru'
 import "./NewCard.css";
 export default function NewCard({
     title,
@@ -7,38 +9,53 @@ export default function NewCard({
     source,
     link,
     image,
-    isOwn,
-    isSaved,
     keyword,
     isLoggedIn,
     onCardSave,
     onCardRemove,
+    onSavedCardRemove,
+    isOpen,
+    isSaved,
+    data,
     status
 }) {
 
     const [isRemove, setRemove] = useState(false)
     const [isMarked, setMarked] = useState(false)
-    const [isAdded, setAdded] = useState(false)
 
 
-    function handleAddToFavsClick() {
-        setAdded(true)
+    function handleStateClick() {
+        if (isSaved) {
+            onCardRemove(data)
+        } else {
+            onCardSave(data)
+        }
     }
 
     function handleRemoveClick() {
-        setRemove(true)
+        setRemove(!isRemove)
+    }
+
+    function handleRemoveFavorite() {
+        onSavedCardRemove(data)
     }
 
     function handleMarkClick() {
-        setMarked(true)
+        setMarked(!isMarked)
     }
+
+    function formatDate(a) {
+        moment.locale('ru');
+        return moment(a).format('LL');
+    }
+
     return (
         <section className="new-card">
             <a href={link} target="_blank" rel="noreferrer" className="new-card__link">
                 <img className="new-card__image" src={image} alt={title} />
             </a>
             <p className={status === "savedNews" ? "new-card__keyword" : "new-card__keyword_hidden"}>{keyword}</p>
-            <button className={isRemove ? "new-card__remove-window"
+            <button onClick={handleRemoveFavorite} className={isRemove ? "new-card__remove-window"
                 : "new-card__remove-window_hidden"}>
                 Убрать из сохранённых</button>
             <button onClick={handleRemoveClick}
@@ -47,12 +64,18 @@ export default function NewCard({
             <button className={isMarked ? "new-card__remind-window"
                 : "new-card__remind-window_hidden"}>
                 Войдите, чтобы сохранить статью</button>
-            {status === "searchNews" ?
-                <button onClick={isLoggedIn ? handleAddToFavsClick : handleMarkClick}
-                    className={isAdded ? "new-card__mark_active" : "new-card__mark"} /> :
-                <button onClick={handleRemoveClick} className="new-card__remove-icon" />}
+            {status === "searchNews"
+                ?
+                <button
+                    onMouseOver={isLoggedIn ? "" : handleMarkClick}
+                    onMouseOut={isLoggedIn ? "" : handleMarkClick}
+                    onClick={isLoggedIn ? handleStateClick : isOpen}
+                    className={isSaved ? "new-card__mark_active" : "new-card__mark"} />
+                :
+                <button onClick={handleRemoveClick}
+                    className="new-card__remove-icon" />}
             <div className="new-card__text">
-                <h6 className="new-card__date">{date}</h6>
+                <h6 className="new-card__date">{formatDate(date)}</h6>
                 <a href={link} className="new-card__link" rel="noreferrer" target="_blank">
                     <h4 className="new-card__title">{title}</h4>
                 </a>

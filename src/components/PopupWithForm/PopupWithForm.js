@@ -29,7 +29,7 @@ export default function PopupWithForm({ isOpen, onSubmit, onClose, children, onC
                 {children}
                 <div className="popup__login">
                     <p className="popup__login-text">или</p>
-                    <Link className="popup__link" onClick={switchPopup}>{linkText}</Link>
+                    <Link to='/' className="popup__link" onClick={switchPopup}>{linkText}</Link>
                 </div>
             </form>
         </section>
