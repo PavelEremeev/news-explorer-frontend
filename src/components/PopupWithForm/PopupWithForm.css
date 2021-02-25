@@ -153,7 +153,7 @@
 }
 
 .popup__login-text {
-  font-family: "Inter Regular";
+  font-family: "Inter";
   font-size: 14px;
   line-height: 17px;
   color: black;
@@ -161,7 +161,7 @@
 }
 
 .popup__link {
-  font-family: "Inter Regular";
+  font-family: "Inter";
   font-size: 14px;
   line-height: 17px;
   border: none;

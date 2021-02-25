@@ -17,14 +17,14 @@ export default function NewsCardList({
 }) {
 
 
-    const [row, setRow] = useState(3)
+    const [isRow, setRow] = useState(3)
 
     function nextRow() {
-        setRow(row + 3)
+        setRow(isRow + 3)
     }
 
     const cardsAmount = initialArticles.length
-    let elementsToRender = initialArticles.slice(0, row)
+    let elementsToRender = initialArticles.slice(0, isRow)
 
     return (
         <section className={onSearch ? "new-cardlist" : "new-cardlist new-cardlist_closed"}>
@@ -49,27 +49,27 @@ export default function NewsCardList({
                             onSavedCardRemove={onSavedCardRemove}
                             isOpen={isOpen}
                             key={i}
-                        />)) :
-                    (savedArticles.map(card, i =>
-                        <NewCard
-                            status={status}
-                            isLoggedIn={isLoggedIn}
-                            keyword={card.keyword}
-                            data={card}
-                            title={card.title}
-                            text={card.text}
-                            date={card.date}
-                            source={card.source}
-                            link={card.link}
-                            image={card.image}
-                            key={i}
-                            onCardRemove={onCardRemove}
-                            onSavedCardRemove={onSavedCardRemove}
-                            isLoggedIn={isLoggedIn}
-                        />))}
-
+                        />)) : ""
+                    // (savedArticles.map(card, i =>
+                    //     <NewCard
+                    //         status={status}
+                    //         isLoggedIn={isLoggedIn}
+                    //         isKeyword={card.keyword}
+                    //         data={card}
+                    //         title={card.title}
+                    //         text={card.text}
+                    //         date={card.date}
+                    //         source={card.source}
+                    //         link={card.link}
+                    //         image={card.image}
+                    //         key={i}
+                    //         onCardRemove={onCardRemove}
+                    //         onSavedCardRemove={onSavedCardRemove}
+                    //         isLoggedIn={isLoggedIn}
+                    //     />))}
+                }
             </div>
-            {status === "searchNews" && row <= cardsAmount ? <button onClick={nextRow} className="new-cardlist__button">Показать ещё</button> : <> </>}
+            {status === "searchNews" && isRow <= cardsAmount ? <button onClick={nextRow} className="new-cardlist__button">Показать ещё</button> : <> </>}
         </section>
     )
 }

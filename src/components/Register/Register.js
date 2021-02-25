@@ -47,7 +47,7 @@ export default function Register({ isOpen, onClose, onCloseOverlay, apiErrorText
             <input
                 onChange={userName.onChange}
                 onBlur={userName.onBlur}
-                type="name"
+                type="text"
                 name="name"
                 placeholder="Введите своё имя"
                 className="popup__input" />

@@ -9,7 +9,7 @@ export default function NewCard({
     source,
     link,
     image,
-    keyword,
+    isKeyword,
     isLoggedIn,
     onCardSave,
     onCardRemove,
@@ -54,7 +54,7 @@ export default function NewCard({
             <a href={link} target="_blank" rel="noreferrer" className="new-card__link">
                 <img className="new-card__image" src={image} alt={title} />
             </a>
-            <p className={status === "savedNews" ? "new-card__keyword" : "new-card__keyword_hidden"}>{keyword}</p>
+            <p className={status === "savedNews" ? "new-card__keyword" : "new-card__keyword_hidden"}>{isKeyword}</p>
             <button onClick={handleRemoveFavorite} className={isRemove ? "new-card__remove-window"
                 : "new-card__remove-window_hidden"}>
                 Убрать из сохранённых</button>

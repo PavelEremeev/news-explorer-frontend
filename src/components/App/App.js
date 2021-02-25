@@ -111,12 +111,11 @@ function App() {
     NewsExplorerAuth.register(name, email, password)
       .then((res) => {
         setWaitResponse(false)
-        if (res.status(200)) {
+        if (res.status === 200) {
           changeToInfoPopup()
         } else {
-          res.json()
-            .then((res) =>
-              setApiErrorText(res.message))
+          console.log(res)
+          res.json().then((res) => setApiErrorText(res.message))
         }
       })
       .catch((err) => {
@@ -159,9 +158,9 @@ function App() {
     }
     NewsExplorerAuth.getContent(jwt).then((res) => {
       if (res) {
-        const currentUser = res;
+        const isCurrentUser = res;
         setLoggedIn(true)
-        setCurrentUser(currentUser)
+        setCurrentUser(isCurrentUser)
         history.push('/')
       } else {
         return
@@ -189,7 +188,7 @@ function App() {
   // searching news
 
   function handleSearchWord(a) {
-    const wordInput = a.searchWord;
+    const wordInput = a.isSearchWord;
     setKeyword(wordInput)
     localStorage.removeItem("keyword");
     localStorage.setItem("keyword", JSON.stringify(wordInput))
@@ -200,6 +199,7 @@ function App() {
     newsApi.getNewsCardList(wordInput)
       .then((res) => {
         if (res.totalResults !== 0) {
+          console.log(res)
           setSearching(false)
           setHaveResults(true)
 
