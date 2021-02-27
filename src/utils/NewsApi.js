@@ -13,10 +13,11 @@ class NewsApi {
         this._pageSize = pageSize;
         this._from = from;
         this._to = to;
+        this._apiKey = newsApiKey;
     }
 
     getNewsCardList(searchWord) {
-        return fetch(`${this._address}/news/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}`, {
+        return fetch(`${this._address}/news/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}&apiKey=${this._apiKey}`, {
             headers: {
                 authorization: newsApiKey,
             },
