@@ -1,29 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Footer.css";
-import githubIcon from "../../images/github.svg"
-import telegramIcon from "../../images/telegram.svg"
+import React from 'react';
+import './Footer.css';
+import { Link } from 'react-router-dom';
+import github from '../../images/github.svg';
+import facebook from '../../images/facebook.svg';
 
-export default function Footer() {
-
-    function getFullYear() {
-        const newYear = new Date().getFullYear();
-        return newYear;
-    }
-
+function Footer() {
     return (
         <footer className="footer">
-            <h3 className="footer__author">&copy; {getFullYear()} Supersite, Powered by News API</h3>
+            <p className="footer__copyright">&copy; 2021 Supersite, Powered by News API</p>
             <div className="footer__container">
                 <div className="footer__link-container">
                     <Link to="/" className="footer__link">Главная</Link>
-                    <a href="https://praktikum.yandex.ru" className="footer__link" rel="noreferrer" target="_blank">Яндекс.Практикум</a>
+                    <a className="footer__link" href="https://praktikum.yandex.ru">Яндекс.Практикум</a>
                 </div>
-                <div className="footer__social-container">
-                    <a href="https://github.com/PavelEremeev" className="footer__social-link" rel="noreferrer" target="_blank"><img alt="github.pic" className="footer__social-icon" src={githubIcon} /></a>
-                    <a href="https://t.me/kermit_kvebit" className="footer__social-link" rel="noreferrer" target="_blank"><img alt="telegram.pic" className="footer__social-icon" src={telegramIcon} /></a>
+                <div className="footer__media-container">
+                    <a className="footer__media" href="https://github.com/" rel="noreferrer" target="_blank"><img className="footer__media-icon" src={github} alt="Иконка гитхаб"></img></a>
+                    <a className="footer__media" href="https://facebook.com/" rel="noreferrer" target="_blank"><img className="footer__media-icon" src={facebook} alt="Иконка гитхаб"></img></a>
                 </div>
             </div>
         </footer>
-    )
+    );
 }
+
+export default Footer;

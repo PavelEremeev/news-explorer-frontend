@@ -1,123 +1,91 @@
-.new-cardlist {
-  display: flex;
-  flex-direction: column;
-  padding: 80px 0;
-  background-color: rgba(245, 246, 247, 1);
-  font-family: "Roboto Medium";
-  align-items: center;
-}
-.new-cardlist_closed.new-cardlist {
-  display: none;
-}
-
-.new-cardlist__results-title {
-  font-family: Robotoslab;
-  /* width: 90%; */
-  font-weight: 400;
-  font-size: 40px;
-  line-height: 46px;
-  /* text-align: left; */
-  padding-right: 800px;
-  margin-bottom: 64px;
-}
-
-.new-cardlist__grid-container {
-  display: grid;
-  grid-template-rows: repeat(1, 1fr);
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 16px;
-  column-gap: 16px;
-  margin: auto;
-}
-
-.new-cardlist__button {
-  font-size: 18px;
-  line-height: 24px;
-  outline: none;
-  border: none;
-  margin: 64px auto 18px;
-  width: 288px;
-  height: 64px;
-  border-radius: 80px;
-  background: rgba(196, 196, 196, 0.1);
-  color: black;
-  transition: ease-in 0.3s all;
-}
-
-.new-cardlist__button:hover {
-  background: rgb(255, 255, 255, 0.9);
-  cursor: pointer;
-  transition: ease-in 0.3s all;
-}
-
-@media screen and (max-width: 1280px) {
-  .new-cardlist__results-title {
-    padding-right: 0;
-    text-align: left;
-    width: 90%;
-  }
-  .new-cardlist__grid-container {
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .new-cardlist {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-  .new-cardlist__button {
-    margin: 22px auto 0;
-    width: 240px;
-    height: 56px;
-  }
-  .new-cardlist__results-title {
-    margin-top: 0;
-    margin-bottom: 32px;
-  }
-  .new-cardlist__grid-container {
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .new-cardlist__grid-container {
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .new-cardlist {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-  .new-cardlist__results-title {
-    margin-top: 0;
-    margin-bottom: 32px;
-  }
-  .new-cardlist__grid-container {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-}
-
-@media screen and (max-width: 325px) {
-  .new-cardlist__grid-container {
-    row-gap: 9px;
-    column-gap: 9px;
+.card-list {
     margin: auto;
-  }
-  .new-cardlist {
-    padding-top: 32px;
-    padding-bottom: 32px;
-  }
-  .new-cardlist__results-title {
-    margin-top: 0;
-    margin-bottom: 24px;
-  }
-  .new-cardlist__grid-container {
-    margin-left: 16px;
-    margin-right: 16px;
-  }
+    padding: 62px 0;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(245, 246, 247, 1);
+}
+
+.card-list_closed {
+    display: none;
+}
+
+.card-list__results-title {
+    width: 1232px;
+    font-family: 'Roboto Slab';
+    margin: 0 auto 64px;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 46px;
+    text-align: left;
+}
+
+.card-list__container {
+    display: grid;
+    margin: auto;
+    grid-template-rows: repeat(auto, 576px);
+    grid-template-columns: repeat(3, 400px);
+    row-gap: 16px;
+    column-gap: 16px;
+}
+
+.card-list__button {
+    margin: 64px auto 18px;
+    width: 288px;
+    height: 64px;
+    border-radius: 100px;
+    background: rgb(255, 255, 255);
+    border: none;
+    padding: 0;
+    font-family: 'Roboto';
+    font-size: 18px;
+    line-height: 24px;
+    color: rgb(0, 0, 0);
+    outline: none;
+}
+
+.card-list__button:hover {
+    background: rgb(255, 255, 255, 0.9);
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1250px) {
+    .card-list {
+        padding: 32px 0;
+    }
+    .card-list__results-title {
+        width: 688px;
+        margin: 0 auto 32px;
+        font-size: 30px;
+        line-height: 34px;
+    }
+    .card-list__container {
+        grid-template-rows: repeat(auto, 420px);
+        grid-template-columns: repeat(3, 224px);
+        row-gap: 8px;
+        column-gap: 8px;
+    }
+    .card-list__button {
+        margin: 32px auto 8px;
+        width: 240px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .card-list {
+        padding: 24px 0;
+    }
+    .card-list__results-title {
+        width: 288px;
+        margin: 0 auto 24px;
+    }
+    .card-list__container {
+        grid-template-rows: repeat(auto, 440px);
+        grid-template-columns: repeat(1, 288px);
+        row-gap: 10px;
+    }
+    .card-list__button {
+        margin: 15px auto 8px;
+        width: 288px;
+    }
 }

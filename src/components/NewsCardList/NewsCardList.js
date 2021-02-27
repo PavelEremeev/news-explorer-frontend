@@ -1,75 +1,63 @@
-import React, { useState } from "react";
-import NewCard from "../NewsCard/NewCard.js"
-import "./NewsCardList.css"
+import React, { useState } from 'react';
+import NewsCard from '../NewsCard/NewsCard.js'
+import './NewsCardList.css'
+import {CARDSINROW} from '../../utils/constants'
 
-export default function NewsCardList({
-    isLoggedIn,
-    status,
-    onSearch,
-    initialArticles,
-    savedArticles,
-    isKeyword,
-    isOpen,
-    onCardSave,
-    onCardRemove,
-    onSavedCardRemove,
-
-}) {
-
-
-    const [isRow, setRow] = useState(3)
-
+function NewsCardList({ isUserLoggedIn, theme, active, initialArticles, savedArticles, onSaveClick, onDeleteClick, onDeleteClickFromSaved, keyWord, openSignUpPopup }) {
+    const [row, setRow] = useState(CARDSINROW)
+    
     function nextRow() {
-        setRow(isRow + 3)
+        setRow(row + CARDSINROW)
     }
 
-    const cardsAmount = initialArticles.length
-    let elementsToRender = initialArticles.slice(0, isRow)
+    const articlesAmount = initialArticles.length
+
+    let elementsToRender = initialArticles.slice(0, row)
 
     return (
-        <section className={onSearch ? "new-cardlist" : "new-cardlist new-cardlist_closed"}>
-            {status === "searchNews" ? <h2 className="new-cardlist__results-title">Результаты поиска</h2> : <></>}
-            <div className="new-cardlist__grid-container">
-                {status === "searchNews" ?
+        <section className={active ? "card-list" : "card-list card-list_closed"}>
+            {theme === 'searchCards' ? <h2 className="card-list__results-title">Результаты поиска</h2> : <></>}
+            <div className="card-list__container">
+                {theme==='searchCards' ?
                     (elementsToRender.map((card, i) =>
-                        <NewCard
-                            status={status}
-                            isLoggedIn={isLoggedIn}
-                            keyword={isKeyword}
-                            title={card.title}
-                            text={card.description}
-                            date={card.publishedAt}
-                            source={card.source.name}
-                            link={card.url}
-                            image={card.urlToImage}
-                            data={card}
-                            isSaved={card.isSaved}
-                            onCardSave={onCardSave}
-                            onCardRemove={onCardRemove}
-                            onSavedCardRemove={onSavedCardRemove}
-                            isOpen={isOpen}
-                            key={i}
-                        />)) : ""
-                    // (savedArticles.map(card, i =>
-                    //     <NewCard
-                    //         status={status}
-                    //         isLoggedIn={isLoggedIn}
-                    //         isKeyword={card.keyword}
-                    //         data={card}
-                    //         title={card.title}
-                    //         text={card.text}
-                    //         date={card.date}
-                    //         source={card.source}
-                    //         link={card.link}
-                    //         image={card.image}
-                    //         key={i}
-                    //         onCardRemove={onCardRemove}
-                    //         onSavedCardRemove={onSavedCardRemove}
-                    //         isLoggedIn={isLoggedIn}
-                    //     />))}
-                }
+                    <NewsCard
+                        theme={theme}
+                        isUserLoggedIn={isUserLoggedIn}
+                        keyWord={keyWord}
+                        title={card.title}
+                        text={card.description}
+                        date={card.publishedAt}
+                        source={card.source.name}
+                        link={card.url}
+                        image={card.urlToImage}
+                        item={card}
+                        isSaved={card.isSaved}
+                        onSaveClick={onSaveClick}
+                        onDeleteClick={onDeleteClick}
+                        onDeleteClickFromSaved = {onDeleteClickFromSaved}
+                        openSignUpPopup={openSignUpPopup}
+                        key={i}
+                    />)) :
+                    (savedArticles.map((card, i) =>
+                    <NewsCard
+                        theme={theme}
+                        isUserLoggedIn={isUserLoggedIn}
+                        onDeleteClick={onDeleteClick}
+                        onDeleteClickFromSaved = {onDeleteClickFromSaved}
+                        keyWord={card.keyword}
+                        title={card.title}
+                        text={card.text}
+                        date={card.date}
+                        source={card.source}
+                        link={card.link}
+                        image={card.image}
+                        item={card}
+                        key={i}
+                    />))}
             </div>
-            {status === "searchNews" && isRow <= cardsAmount ? <button onClick={nextRow} className="new-cardlist__button">Показать ещё</button> : <> </>}
+            {theme === 'searchCards' && row <= articlesAmount ? <button onClick={nextRow} className="card-list__button">Показать еще</button> : <></>}
         </section>
-    )
+    );
 }
+
+export default NewsCardList;

@@ -1,74 +1,41 @@
-import React, { useContext } from "react";
-import { Link, Route, Switch } from 'react-router-dom'
-import "./Header.css";
-import CurrentUserContext from "../../contexts/CurrentUserContext";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Header.css'
+import whiteLogoutImage from '../../images/logout.svg'
+import blackLogoutImage from '../../images/logout-black.svg'
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 
-
-export default function Header({ isOpen, onSignOut, onChangeHeaderMenu, onClickMenu, isLoggedIn }) {
-
-    const currentUser = useContext(CurrentUserContext);
-
-
-
+function Header({ isNavigationOpened, openNavigationHandler, userLoggedIn, theme, openSignInPopup, logOut }) {
+    const currentUser = React.useContext(CurrentUserContext);
+ 
     return (
-        <Switch>
-            <Route exact path="/">
-                <header className="header">
-                    <div className="header__background" />
-                    <div className="header__container">
-                        <h3 className="header__logo">NewsExplorer</h3>
-                        <div className="header__button-wrapper" onClick={onChangeHeaderMenu}>
-                            <button className={`header__button-mobile ${onClickMenu ? `header__button-mobile_active` : ""}`} /></div>
-                        <div className="header__menu-desktop">
-                            <Link to="/" className="header__link header__link-border">Главная
-                            <div className="header__border" />
-                            </Link>
-                            {isLoggedIn ? <Link to="/saved-news" className="header__link">Сохранённые статьи</Link> : ""}
-                            {isLoggedIn ? <div onClick={onSignOut} className="header__button header__button-login">
-                                <Link to="/" className="header__login">{currentUser.name}</Link>
-                                <div className="header__button-image" />
-                            </div> : <button className="header__button" onClick={isOpen}>Авторизоваться</button>}
-                        </div>
-                    </div>
-                    <div className={`header__menu ${onClickMenu ? `header__menu_open` : ""}`}>
-                        <Link to="/" className="header__link">Главная</Link>
-                        {isLoggedIn ? <Link to="/saved-news" className="header__link">Сохранённые статьи</Link> : ""}
-                        {isLoggedIn ? <div onClick={onSignOut} className="header__button header__button-login">
-                            <Link to="/" className="header__login">{currentUser.name}</Link>
-                            <div className="header__button-image" />
-                        </div> : <button className="header__button" onClick={isOpen}>Авторизоваться</button>}
-                    </div>
-                </header>
-            </Route>
-            <Route path="/saved-news">
-                <header className="header">
-                    <div className="header__container header__container-login">
-                        <h3 className="header__logo header__logo-login">NewsExplorer</h3>
-                        <div className="header__button-wrapper" onClick={onChangeHeaderMenu}>
-                            <button className={`header__button-mobile-login ${onClickMenu ? `header__button-mobile_active` : ""}`} /></div>
-                        <div className="header__menu-desktop">
-                            <Link to="/" className="header__link header__link-login">Главная</Link>
-                            <Link to="/saved-news" className="header__link header__link-login header__link-border">Сохранённые статьи
-                            <div className="header__border header__border-login" />
-                            </Link>
-                            <div onClick={onSignOut} className="header__button header__button-login">
-                                <Link to="/" className="header__login">{currentUser.name}</Link>
-                                <div className="header__button-image" />
-                            </div>
-                        </div>
-                    </div>
+        <header>
+            <div className={theme === 'white' ? `header__background` : `header__background header__background_hidden`}></div>
+            <div className={isNavigationOpened ? `header__blur header__blur_active` : `header__blur`}></div>
+            <div className={isNavigationOpened ? `header__main header__main_${theme}` : `header__main`}>
+                <p className={`header__logo header__logo_${theme}`}>NewsExplorer</p>
+                <div className={isNavigationOpened ? `header__container header__container_${theme} header__container_opened` : `header__container`}>
+                    <button className={theme === 'white' ? `header__invisible-button header__invisible-button_${theme} header__invisible-button_border` : `header__invisible-button`}>
+                        <Link to="/" className={`header__item header__item_${theme}`}>Главная</Link>
+                    </button>
+                    <button className={userLoggedIn ? `header__invisible-button header__invisible-button_${theme}` : `header__invisible-button_hidden`}>
+                        <Link to="/saved-news" className={`header__item header__item_${theme}`}>Сохраненные статьи</Link>
+                    </button>
+                    <button className={`header__button header__button_${theme}`} onClick={userLoggedIn ? logOut : openSignInPopup}>
+                        <div className={`header__item header__item_${theme}`}>{userLoggedIn ? currentUser.name : `Авторизоваться`}</div>
+                        <img className={userLoggedIn ? `header__button-image header__button-image_active` : `header__button-image`}
+                            src={theme === 'white' ? whiteLogoutImage : blackLogoutImage}
+                            alt="выход" />
+                    </button>
 
-                    <div className={`header__menu ${onClickMenu ? `header__menu_open` : ""}`}>
-                        <Link to="/" className="header__link header__link-login">Главная</Link>
-                        <Link to="/saved-news" className="header__link header__link-login">Сохранённые статьи</Link>
-                        <div onClick={onSignOut} className="header__button header__button-login">
-                            <Link to="/" className="header__login">{currentUser.name}</Link>
-                            <div className="header__button-image" />
-                        </div>
-                    </div>
-                </header>
-            </Route>
-        </Switch>
-    )
+                </div >
+                <button className={isNavigationOpened ? `header__navigation-button header__navigation-button_${theme} header__navigation-button_${theme}_opened` : `header__navigation-button header__navigation-button_${theme}`}
+                    onClick={openNavigationHandler}>
+                </button>
+            </div >
+        </header>
+    );
 }
+
+export default Header;

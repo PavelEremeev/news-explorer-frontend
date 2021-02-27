@@ -1,37 +1,35 @@
-import React, { useState } from "react";
-import "./SearchForm.css";
+import React from 'react';
+import './SearchForm.css'
 
-export default function SearchForm({ onSearch }) {
-
-    const [isSearchWord, setSearchWord] = useState("")
-
-
-    function handleSearch(evt) {
-        setSearchWord(evt.target.value)
+function SearchForm({ onSearchWord }) {
+    const [searchWord, setSearchWord] = React.useState('');
+    function handleSearchWord(e) {
+        setSearchWord(e.target.value);
     }
 
-    function handleSubmit(evt) {
-        evt.preventDefault();
-        onSearch({ isSearchWord })
+    function handleSubmit(e) {
+        e.preventDefault();
+        onSearchWord({
+            searchWord
+        }
+        );
+
     }
 
     return (
-        <section className="search">
-            <h1 className="search__title">
-                Что творится в мире?
-                </h1>
-            <h3 className="search__subtitle">
-                Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.
-                </h3>
-            <form className="search__form" onSubmit={handleSubmit}>
-                <input className="search__input"
+        <section className="search-form">
+            <h1 className="search-form__title">Что творится в мире?</h1>
+            <p className="search-form__subtitle">Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.</p>
+            <form onSubmit={handleSubmit} className="search-form__form">
+                <input className="search-form__input"
                     placeholder="Введите тему новости"
-                    onChange={handleSearch}
-                    value={isSearchWord}
-                    required
-                ></input>
-                <button className="search__button">Искать</button>
+                    onChange={handleSearchWord}
+                    value={searchWord}
+                    required></input>
+                <button className="search-form__button">Искать</button>
             </form>
         </section>
-    )
+    );
 }
+
+export default SearchForm;

@@ -1,37 +1,33 @@
-import React from "react"
-import { Link } from "react-router-dom";
-import "./PopupWithForm.css";
+import React from 'react';
+import './PopupWithForm.css';
 
+function PopupWithForm({ title, isOpen, onClose, children, onSubmit, linkText, goToAnotherPopup, overlayClose}) {
 
-export default function PopupWithForm({ isOpen, onSubmit, onClose, children, onCloseOverlay, linkText, popupTitle, switchPopup }) {
+    function handleSubmit(e) {
+        e.preventDefault();
+        onSubmit();
+    }
 
-
-    function closePopupOnOverlay(evt) {
+    function closePopupOverlay(evt) {
         if (evt.target === evt.currentTarget) {
-            onCloseOverlay()
+            overlayClose()
         }
     }
 
-
-    // временное решение сабмита
-    function handleSubmit(evt) {
-        evt.preventDefault()
-        onSubmit()
-    }
-
     return (
-        <section className={isOpen ? `popup popup_opened` : `popup`} onClick={closePopupOnOverlay}>
-            <form className="popup__container" onSubmit={handleSubmit} action="#" noValidate>
-                <button onClick={onClose}
-                    className="popup__close-button"
-                    type="button" />
-                <h2 className="popup__title">{popupTitle}</h2>
+        <section className={isOpen ? `popup popup_opened` : `popup`} onClick={closePopupOverlay}>
+            <form className={`popup__container`} onSubmit={handleSubmit} action="#" noValidate>
+                <button type="button" onClick={onClose} className="popup__close-button"></button>
+                <h3 className="popup__title">{title}</h3>
                 {children}
-                <div className="popup__login">
-                    <p className="popup__login-text">или</p>
-                    <Link to='/' className="popup__link" onClick={switchPopup}>{linkText}</Link>
+                <div className="popup__signup">
+                    <p className="popup__signup">или</p>
+                    <p onClick={goToAnotherPopup} className="popup__link">{linkText}</p>
                 </div>
             </form>
         </section>
-    )
+    );
 }
+
+
+export default PopupWithForm;

@@ -27,13 +27,13 @@ const useValidation = (value, validations) => {
                         .test(String(value).toLowerCase()) ? setEmailError(false) : setEmailError(true)
 
                     break
-                default:
+                    default:
             }
         }
     }, [value, validations])
 
     useEffect(() => {
-        if (isEmpty || minLengthError || maxLengthError || isEmailError) {
+        if (isEmpty || minLengthError || maxLengthError || isEmailError ) {
             setInputValid(false)
         } else {
             setInputValid(true)
@@ -42,7 +42,7 @@ const useValidation = (value, validations) => {
         minLengthError,
         maxLengthError,
         isEmailError,
-    ])
+        ])
 
     return {
         isEmpty,
@@ -57,10 +57,10 @@ const useInput = (initialValue, validations) => {
     const [value, setValue] = useState(initialValue)
     const [isDirty, setDirty] = useState(false)
     const valid = useValidation(value, validations)
-    const onChange = (evt) => {
-        setValue(evt.target.value)
+    const onChange = (e) => {
+        setValue(e.target.value)
     }
-    const onBlur = (evt) => {
+    const onBlur = (e) => {
         setDirty(true)
     }
     return {
@@ -72,4 +72,4 @@ const useInput = (initialValue, validations) => {
     }
 }
 
-export { useValidation, useInput } 
+export {useValidation, useInput} 

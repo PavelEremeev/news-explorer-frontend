@@ -1,353 +1,267 @@
-.header {
-  font-family: "Roboto Medium";
-  height: 80px;
-  max-width: 100%;
-  border-bottom: 1px solid #545454;
+.header__main {
+    max-width: 100%;
+    height: 80px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 104px;
+    border-bottom: 1px solid rgba(196, 196, 196);
+    z-index: 4;
 }
 
 .header__background {
-  background: url(../../images/header_background.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 576px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 576px;
+    background-image: url(../../images/background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.header__background_hidden {
+    display: none;
 }
 
 .header__logo {
-  font-family: "Robotoslab";
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 700;
-  margin: 30px 0 25px 0;
-  color: white;
+    text-align: center;
+    font-size: 20px;
+    line-height: 36px;
+    font-family: 'Roboto Slab';
+    z-index: 2;
+}
+
+.header__logo_white {
+    color: white;
+}
+
+.header__logo_black {
+    color: black;
 }
 
 .header__container {
-  display: flex;
-  flex-direction: row;
-  background-color: transparent;
-  justify-content: space-between;
-  align-items: center;
-  margin-left: 104px;
-  margin-right: 104px;
-  z-index: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 2;
+}
+
+.header__item {
+    text-decoration: none;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0 8px;
+    transition: opacity 0.6s;
+}
+
+.header__item:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.header__item_white {
+    color: white;
+}
+
+.header__item_black {
+    color: black;
+}
+
+.header__invisible-button {
+    height: 80px;
+    box-sizing: border-box;
+    box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0 8px;
+    transition: .3s;
+}
+
+.header__invisible-button_hidden {
+    display: none;
+}
+
+.header__invisible-button_white {
+    display: block;
+}
+
+.header__invisible-button_border {
+    border-bottom: 3px solid rgba(255, 255, 255, 1);
+}
+
+.header__invisible-button_black {
+    border-bottom: 3px solid rgba(0, 0, 0, 1);
 }
 
 .header__button {
-  border: 1px solid white;
-  color: white;
-  box-sizing: border-box;
-  border-radius: 100px;
-  cursor: pointer;
-  background-color: transparent;
-  width: 176px;
-  height: 48px;
-  outline: none;
-  font-size: 18px;
-  line-height: 24px;
-  transition: ease-in 0.3s all;
+    display: flex;
+    height: 48px;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 30px;
+    box-sizing: border-box;
+    box-shadow: none;
+    outline: none;
+    margin-left: 16px;
+    transition: .3s;
 }
 
-.header__button:hover {
-  transition: ease-in 0.3s all;
-  border: 1px solid #2f71e5;
-  background-color: #2f71e5;
+.header__button_white {
+    border-color: rgb(255, 255, 255);
 }
 
-.header__link {
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  color: white;
-  font-size: 18px;
-  line-height: 24px;
-  margin-right: 32px;
-  transition: ease-in 0.3s all;
-}
-
-.header__link:hover {
-  transition: ease-in 0.3s all;
-  opacity: 0.5;
-}
-
-.header__border {
-  border-bottom: white solid 3px;
-  height: 26px;
-}
-
-.header__border-login {
-  border-bottom: black solid 3px;
-}
-
-.header__logo-login {
-  color: black;
-}
-
-.header__link-login {
-  color: black;
-}
-
-.header__link-border.header__link-login {
-  padding-top: 29px;
-}
-
-.header__link-border {
-  padding-top: 29px;
-}
-
-.header__login {
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  color: black;
-  font-size: 18px;
-  line-height: 24px;
-  margin-left: 15px;
-  transition: ease-in 0.3s all;
-  max-width: 150px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.header__menu-desktop {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-.header__menu {
-  display: none;
-  flex-direction: column;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid #545454;
-}
-
-.header__button-container {
-  cursor: pointer;
-}
-
-.header__button-login {
-  border: 1px solid black;
-  color: black;
-  /* position: relative; */
-  /* padding-top: 8px; */
-  /* padding-left: 15px; */
-  /* padding-bottom: 8px; */
-  /* padding-right: 40px; */
-  text-decoration: none;
-  transition: ease-in 0.3s all;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-  width: auto;
+.header__button_black {
+    border-color: rgb(209, 210, 214, 1);
 }
 
 .header__button-image {
-  margin: 13px;
-  background: url(../../images/exit.svg);
-  height: 16px;
-  width: 16px;
-  background-size: cover;
-  background-position: center;
-}
-
-.header__button-wrapper {
-  width: 30px;
-  height: 30px;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  /* margin: 20px; */
-}
-
-.header__button-wrapper:hover {
-  opacity: 0.7;
-  transition: linear 0.3s all;
-}
-
-@media screen and (max-width: 1280px) {
-  .header__container {
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .header__link {
-    font-size: 16px;
-  }
-  .header__login {
-    font-size: 16px;
-    max-width: 60px;
-  }
-
-  /* .header__button {
-    font-size: 16px;
-    width: 152px;
-    height: 40px;
-  }
-  .header__button-login {
-    width: 100px;
-    height: 40px;
-  } */
-}
-
-@media screen and (max-width: 650px) {
-  .header {
-    border-bottom: none;
-    height: 56px;
-  }
-
-  .header__logo {
-    margin: 16px 0;
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-  .header__login {
-    max-width: 200px;
-  }
-
-  .header__container {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    margin: 0;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .header__link {
-    margin: 16px auto 0 16px;
-  }
-
-  .header__menu-desktop {
     display: none;
-  }
+}
 
-  .header__border {
-    display: none;
-  }
+.header__button-image_active {
+    display: block;
+    transition: opacity 0.6s;
+}
 
-  .header__border-login {
-    display: none;
-  }
-
-  .header__menu_open {
-    display: flex;
-    text-align: left;
-    align-items: baseline;
-  }
-
-  .header__button-image {
-    right: 0;
-    top: 99px;
-    left: 95px;
-  }
-
-  .header__button {
-    margin: 16px auto 16px 16px;
-  }
-
-  .header__button-container {
-    margin: 16px auto 16px 16px;
-  }
-
-  .header__button-mobile-login {
-    background-color: black;
-  }
-
-  .header__button-mobile {
-    position: relative;
-    width: 30px;
-    height: 3px;
-    background-color: white;
-    border: none;
-    outline: none;
+.header__button-image_active:hover {
     cursor: pointer;
-  }
-  .header__button-mobile-login {
-    position: relative;
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
+    opacity: 0.7;
+}
 
-  .header__button-mobile-login::before {
+.header__navigation-button {
+    display: none;
     position: absolute;
-    left: 0;
-    top: -10px;
-    content: "";
-    display: block;
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
-  }
-
-  .header__button-mobile-login::after {
-    position: absolute;
-    left: 0;
-    top: 10px;
-    content: "";
-    display: block;
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
-  }
-
-  .header__button-mobile::before {
-    position: absolute;
-    left: 0;
-    top: -10px;
-    content: "";
-    display: block;
-    width: 30px;
-    height: 3px;
-    background-color: white;
-    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
-  }
-
-  .header__button-mobile::after {
-    position: absolute;
-    left: 0;
-    top: 10px;
-    content: "";
-    display: block;
-    width: 30px;
-    height: 3px;
-    background-color: white;
-    transition: transform 0.2s ease-in, top 0.2s linear 0.2s;
-  }
-
-  .header__button-mobile_active {
+    top: 16px;
+    right: 16px;
+    height: 24px;
+    width: 24px;
     background-color: transparent;
-  }
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
-  .header__button-mobile_active::before {
-    transform: rotate(45deg);
-    top: 0;
-    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
-  }
+.header__navigation-button_white {
+    background-image: url(../../images/menu.svg);
+}
 
-  .header__button-mobile_active::after {
-    transform: rotate(-45deg);
-    top: 0;
-    transition: top 0.2s linear, transform 0.2s ease-in 0.2s;
-  }
-  .header__button-wrapper {
-    display: flex;
-    transition: linear 0.3s all;
-  }
+.header__navigation-button_white_opened {
+    background-image: url(../../images/menu-close.svg);
+}
+
+.header__navigation-button_black {
+    background-image: url(../../images/menu-black.svg);
+}
+
+.header__navigation-button_black_opened {
+    background-image: url(../../images/menu-close-black.svg);
+}
+
+@media screen and (max-width: 800px) {
+    .header__main {
+        padding: 0 5%;
+        height: 66px
+    }
+    .header__background {
+        height: 400px;
+    }
+    .header__logo {
+        font-size: 20px;
+        line-height: 24px;
+    }
+    .header__invisible-button {
+        height: 66px;
+    }
+    .header__item {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+@media screen and (max-width: 555px) {
+    .header__main {
+        height: 56px
+    }
+    .header__background {
+        height: 536px;
+        background-image: url(../../images/background-mobile.jpg);
+        background-size: 100% auto;
+    }
+    .header__main_white {
+        background-color: rgb(0, 0, 0);
+    }
+    .header__main_black {
+        background-color: rgb(255, 255, 255);
+    }
+    .header__logo {
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .header__invisible-button {
+        height: 56px;
+    }
+    .header__container {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        top: 57px;
+        left: 0;
+        width: 100%;
+        max-height: 230px;
+    }
+    .header__container_white {
+        background-color: rgb(0, 0, 0)
+    }
+    .header__container_black {
+        background-color: rgb(255, 255, 255)
+    }
+    .header__container_opened {
+        display: flex;
+    }
+    .header__item {
+        text-decoration: none;
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 24px;
+        margin: 0 8px;
+    }
+    .header__button {
+        height: 56px;
+        width: 288px;
+        margin-bottom: 24px;
+        margin-top: 24px;
+        margin-left: 16px;
+    }
+    .header__navigation-button {
+        display: block;
+    }
+    .header__blur {
+        display: none;
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .header__blur_active {
+        display: flex;
+    }
 }
