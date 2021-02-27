@@ -64,6 +64,6 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  address: 'https://api.eremeev.students.nomoredomains.rocks',
+  address: 'https://api.eremeev1.students.nomoredomains.rocks',
 
 });

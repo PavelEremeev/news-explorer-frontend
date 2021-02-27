@@ -1,6 +1,6 @@
 import { setToken } from './token';
 
-export const BASE_URL = 'https://api.eremeev.students.nomoredomains.rocks';
+export const BASE_URL = 'https://api.eremeev1.students.nomoredomains.rocks';
 
 
 export const register = (name, email, password) => {
