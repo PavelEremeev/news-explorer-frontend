@@ -37,7 +37,7 @@ class MainApi {
           setToken(data.token);
           return data;
         } else {
-          return Promise.reject(res.json());
+          return;
         }
       })
   }

@@ -138,7 +138,7 @@ function App() {
   function handleLogin({ email, password }) {
     setIsLoading(true);
     return mainApi.authorize(email, password)
-      .then(() => {
+      .then((data) => {
         setLoginErrorMessage(null);
         setToken(data.token)
         tokenCheck();
