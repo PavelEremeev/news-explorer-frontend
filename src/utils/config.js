@@ -3,11 +3,11 @@ require('dotenv').config();
 const { NODE_ENV } = process.env;
 
 const BASE_URL = NODE_ENV === 'production' ?
-  'http://localhost:3000' :  'https://api.eremeev1.students.nomoredomains.rocks';
+  'http://localhost:3000' : 'https://api.eremeev1.students.nomoredomains.rocks';
 
 const BASE_URL_API = NODE_ENV === 'production' ?
-  'https://newsapi.org/v2/everything':
-  'https://nomoreparties.co/news/v2/everything';
+  'https://newsapi.org/v2/everything' :
+  'https://nomoreparties.co/news/v2/top-headlines';
 
 
 const API_KEY = 'fd1e859e79f74af4b07453725f46383e';
