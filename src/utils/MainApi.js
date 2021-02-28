@@ -46,7 +46,6 @@ class MainApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
     })
       .then((res) => {
         if (res.status === 200) {
@@ -59,7 +58,6 @@ class MainApi {
   signOut() {
     return fetch(`${this._baseUrl}/signout`, {
       method: 'POST',
-      credentials: 'include',
     })
       .then((res) => {
         if (res.status === 200) {
@@ -76,7 +74,6 @@ class MainApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify({
         keyword: keyword,
         title: title,
@@ -102,7 +99,6 @@ class MainApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
     })
       .then((res) => {
         if (res.status === 200) {
@@ -119,7 +115,6 @@ class MainApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
     })
       .then((res) => {
         if (res.status === 200) {
