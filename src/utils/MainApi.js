@@ -1,4 +1,4 @@
-import {BASE_URL} from "./config";
+import { BASE_URL } from "./config";
 
 class MainApi {
   constructor({ baseUrl }) {
@@ -29,7 +29,6 @@ class MainApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify({ email, password })
     })
       .then((res) => {
