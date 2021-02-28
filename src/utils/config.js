@@ -8,7 +8,7 @@ const BASE_URL = NODE_ENV === 'production' ?
 
 const BASE_URL_API = NODE_ENV === 'production' ?
 
-  'https://nomoreparties.co/news/v2/top-headlines' :
+  'https://nomoreparties.co/news/v2/everything' :
   'https://newsapi.org/v2/everything';
 
 
