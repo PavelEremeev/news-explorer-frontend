@@ -1,69 +1,139 @@
-import { getToken } from './token';
+import {BASE_URL} from "./config";
 
 class MainApi {
-  constructor({ address }) {
-    this._address = address;
+  constructor({ baseUrl }) {
+    this._baseUrl = baseUrl;
   }
 
-  getInitialInfo() {
-    return Promise.all([this.getUserInfo(), this.getCardList()]);
+  register(email, password, name) {
+    return fetch(`${this._baseUrl}/signup`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password, name })
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
+  }
+
+  authorize(email, password) {
+    return fetch(`${this._baseUrl}/signin`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
   }
 
   getUserInfo() {
-    const token = getToken();
-    return fetch(`${this._address}/users/me`, {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'GET',
       headers: {
-        authorization: token,
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
   }
 
-  getCardList() {
-    const token = getToken();
-    return fetch(`${this._address}/articles`, {
-      headers: {
-        authorization: token,
-        "Content-Type": "application/json",
-      },
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+  signOut() {
+    return fetch(`${this._baseUrl}/signout`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
   }
 
-  createCard({ keyword, title, text, date, source, link, image }) {
-    const token = getToken();
-    return fetch(`${this._address}/articles`, {
-      method: "POST",
+  setNewCard(keyword, title, text, date, source, link, image) {
+    return fetch(`${this._baseUrl}/articles`, {
+      method: 'POST',
       headers: {
-        authorization: token,
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
-        keyword, title, text, date, source, link, image
-      }),
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+        keyword: keyword,
+        title: title,
+        text: text,
+        date: date,
+        source: source,
+        link: link,
+        image: image,
+      })
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
   }
 
-  deleteCard(articleId) {
-    const token = getToken();
-    return fetch(`${this._address}/articles/${articleId}`, {
-      method: "DELETE",
+  deleteCard(id) {
+    return fetch(`${this._baseUrl}/articles/${id}`, {
+      method: 'DELETE',
       headers: {
-        authorization: token,
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
   }
+
+  getSavedCards() {
+    return fetch(`${this._baseUrl}/articles`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        return Promise.reject(res.json());
+      })
+  }
+
 }
 
-export const mainApi = new MainApi({
-  address: 'https://api.eremeev1.students.nomoredomains.rocks',
-
+const mainApi = new MainApi({
+  baseUrl: BASE_URL,
 });
+
+export default mainApi;

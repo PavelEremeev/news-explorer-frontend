@@ -1,374 +1,385 @@
+import React from 'react';
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 import './App.css';
-import React, { useEffect, useCallback, useState } from 'react';
-import { Route, useHistory, Switch } from 'react-router-dom';
-import * as auth from '../../utils/auth.js';
-import { getToken, setToken, removeToken } from '../../utils/token';
-
-import ProtectedRoute from '../ProtectedRoute';
-import Header from '../Header/Header.js';
-import SearchForm from '../SearchForm/SearchForm.js';
-import About from '../About/About.js';
-import Footer from '../Footer/Footer.js';
-import Register from '../Register/Register.js';
-import Login from '../Login/Login.js';
-import InfoToolTip from '../InfoToolTip/InfoToolTip.js';
-import Preloader from '../Preloader/Preloader.js';
-import RequestPreloader from '../RequestPreloader/RequestPreloader.js';
-import NewsCardList from '../NewsCardList/NewsCardList.js';
-import SavedNews from '../SavedNews/SavedNews.js';
-import NoNewsFound from '../NoNewsFound/NoNewsFound.js';
-import ServerError from '../ServerError/ServerError.js';
-import { newsApi } from '../../utils/NewsApi.js';
-import { mainApi } from '../../utils/MainApi.js';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import Main from '../../components/Main/Main';
+import SavedNews from '../../components/SavedNews/SavedNews';
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
+import SavedNewsHeader from '../../components/SavedNewsHeader/SavedNewsHeader';
+import RegisterPopup from '../../components/RegisterPopup/RegisterPopup';
+import LoginPopup from '../../components/LoginPopup/LoginPopup';
+import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
+import mainApi from "../../utils/MainApi";
+import newsApi from "../../utils/NewsApi";
+import {CARD_SEARCH_ERR, CONNECTION_REFUSED, SERVER_ERR} from "../../utils/constants";
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import ErrorMessagePopup from '../../components/ErrorMessagePopup/ErrorMessagePopup';
+import {CARDS_IN_A_ROW} from "../../utils/config";
 
 function App() {
-
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [savedArticles, setSavedArticles] = React.useState([]);
-  const [keyWord, setKeyWord] = React.useState('');
-  const [isNavigationOpened, setNavigationOpened] = React.useState(false);
-  const [isUserLoggedIn, setUserLoggedIn] = React.useState(false);
-  const [isSignInPopupOpened, setSignInPopupOpened] = React.useState(false);
-  const [isSignUpPopupOpened, setSignUpPopupOpened] = React.useState(false);
-  const [isInfoToolTipOpened, setInfoToolTipOpened] = React.useState(false);
-  const [isStartSerching, setStartSearching] = React.useState(false);
-  const [isWaitingResponse, setWaitingResponse] = React.useState(false);
-
-  const [isHaveResults, setHaveResults] = React.useState(false);
-  const [isNoResults, setNoResults] = React.useState(false);
-  const [isServerError, setServerError] = React.useState(false);
-  const [foundArticles, setFoundArticles] = React.useState([])
-  const [apiErrorText, setApiErrorText] = useState('')
-
   const history = useHistory();
+  const [cards, setCards] = React.useState([]);
+  const [savedCards, setSavedCards] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isRegisterPopupOpen, setRegisterPopupOpen] = React.useState(false);
+  const [isLoginPopupOpen, setLoginPopupOpen] = React.useState(false);
+  const [isConfirmPopupOpen, setConfirmPopupOpen] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isPopupOpen, setIsPopupOpen] = React.useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = React.useState(null);
+  const [registerErrorMessage, setRegisterErrorMessage] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState(null);
+  const [isFound, setIsFound] = React.useState(false);
+  const [count, setCount] = React.useState(0);
+  const [searchErr, setSearchErr] = React.useState('');
+  const [isLoadingAdd, setIsLoadingAdd] = React.useState(false);
 
-  function generateId() {
-    return `f${(~~(Math.random() * 1e8)).toString(16)}`
-  }
-
-  function toggleNavigation() {
-    setNavigationOpened(!isNavigationOpened)
-  }
-
-  function openSignInPopup() {
-    setNavigationOpened(false)
-    setSignInPopupOpened(true)
-  }
-
-  function openSignUpPopup() {
-    setSignUpPopupOpened(true)
-  }
-
-  function openInfoToolTipPopup() {
-    setInfoToolTipOpened(true)
-  }
-
-  function goToSignUpPopup() {
-    closeAllPopups()
-    openSignUpPopup()
-  }
-
-  function goToSignInPopup() {
-    closeAllPopups()
-    setSignInPopupOpened(true)
-  }
-
-  function goToInfoToolTipPopup() {
-    setSignUpPopupOpened(false)
-    openInfoToolTipPopup()
-  }
-
-  //попап регистрации
-
-  function submitSigninPopup() {
-    setUserLoggedIn(true);
-    closeAllPopups();
-  }
-
-  //закрытие попапов
-  function closeAllPopups() {
-    setSignInPopupOpened(false);
-    setSignUpPopupOpened(false);
-    setInfoToolTipOpened(false)
-    setApiErrorText('')
-  }
-
-  function closeInfoToolTip() {
-    setInfoToolTipOpened(false)
-    openSignInPopup()
-  }
-
-  const handleEscPress =
-    useCallback((evt) => {
-      if (evt.key === 'Escape') {
-        closeAllPopups();
-      }
-    }, [])
-
-  //регистрация и авторизация
-  const authorization = (email, password) => {
-    setWaitingResponse(true)
-    auth.authorize(email, password)
-      .then((data) => {
-        setWaitingResponse(false)
-        if (!data) {
-          setApiErrorText('Что-то пошло не так! Попробуйте еще раз.')
-        }
-        else {
-          setToken(data.token);
-          tokenCheck()
-          submitSigninPopup()
-        }
-      })
-      .then(() => {
-        mainApi.getCardList().then(
-          (res) => {
-            const items = res
-            setSavedArticles(items)
-          }).catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        setWaitingResponse(false)
-        setApiErrorText(err.message)
-      });
-
-  }
-
-  const registration = (name, email, password) => {
-    setWaitingResponse(true)
-    auth.register(name, email, password).then((res) => {
-      setWaitingResponse(false)
-      if (res.status === 200) {
-        goToInfoToolTipPopup()
-      } else {
-        res.json().then((res) => setApiErrorText(res.message))
-      }
-    })
-      .catch((err) => {
-        setWaitingResponse(false)
-        console.log(err)
-      })
-  }
-
-  const tokenCheck = () => {
-    const jwt = getToken();
-    if (!jwt) {
-      return;
+  React.useEffect(() => {
+    if (isLoginPopupOpen || isConfirmPopupOpen || isRegisterPopupOpen) {
+      setIsPopupOpen(true);
+    } else {
+      setIsPopupOpen(false);
     }
-    auth.getContent(jwt).then((res) => {
-      if (res) {
-        const currentUser = res;
-        setUserLoggedIn(true)
-        setCurrentUser(currentUser);
-        history.push('/')
-      }
-      else {
-        return
-      }
-    }).catch(err => console.log(err))
-  }
+  }, [isLoginPopupOpen, isConfirmPopupOpen, isRegisterPopupOpen]);
 
-  function signOut() {
-    removeToken();
-    localStorage.clear()
-    setUserLoggedIn(false)
-    history.push('/');
-  }
-
-  //поиск статей
-  function handleSearchWord(a) {
-    const word = a.searchWord;
-    setKeyWord(word)
-    localStorage.removeItem('keyWord')
-    localStorage.setItem('keyWord', JSON.stringify(word))
-    setHaveResults(false)
-    setNoResults(false)
-    setStartSearching(true)
-    setServerError(false);
-    newsApi.getNewsCardList(word).then((res) => {
-      if (res.totalResults !== 0) {
-        setStartSearching(false)
-        setHaveResults(true)
-        const foundItems = res.articles;
-        foundItems.forEach((item) => {
-          item.isSaved = false
-          item.lsId = generateId();
-        })
-        localStorage.removeItem('foundItems')
-        localStorage.setItem('foundItems', JSON.stringify(foundItems))
-        const foundItemsLocal = JSON.parse(localStorage.getItem('foundItems'))
-        setFoundArticles(foundItemsLocal)
-      }
-      else {
-        setStartSearching(false)
-        setNoResults(true)
-      }
-    }).catch((err) => {
-      setStartSearching(false)
-      setServerError(true)
-      console.log(err)
-    });
-  }
-
-  // сохранение статей
-  function handleSaveClick(card) {
-    mainApi.createCard({
-      keyword: keyWord,
-      title: card.title,
-      text: card.description,
-      date: card.publishedAt,
-      source: card.source.name,
-      link: card.url,
-      image: card.urlToImage,
-    }).then(
-      (newCard) => {
-        card._id = newCard._id;
-        card.isSaved = true;
-        const newFoundArticles = foundArticles.map((c) => c.lsId === card.lsId ? card : c);
-        localStorage.removeItem('foundItems')
-        localStorage.setItem('foundItems', JSON.stringify(newFoundArticles))
-        const foundItemsLocal = JSON.parse(localStorage.getItem('foundItems'))
-        setFoundArticles(foundItemsLocal)
-        setSavedArticles([...savedArticles, newCard])
-      }).catch((err) => console.log(err));
-  }
-
-  function handleDeleteClick(card) {
-    mainApi.deleteCard(card._id).then((newCard) => {
-      card.isSaved = false;
-      const newCards = savedArticles.filter((c) => c._id !== card._id);
-      setSavedArticles(newCards);
-      const newFoundArticles = foundArticles.map((c) => c.lsId === card.lsId ? card : c);
-      localStorage.removeItem('foundItems')
-      localStorage.setItem('foundItems', JSON.stringify(newFoundArticles))
-      const foundItemsLocal = JSON.parse(localStorage.getItem('foundItems'))
-      setFoundArticles(foundItemsLocal)
-    }).catch((err) => console.log(err));
-  }
-
-  function handleDeleteClickFromSaved(card) {
-    mainApi.deleteCard(card._id).then((newCard) => {
-      const newCards = savedArticles.filter((c) => c._id !== card._id);
-      setSavedArticles(newCards);
-      const newFoundArticle = foundArticles.filter((c) => c._id === card._id);
-      newFoundArticle[0].isSaved = false
-      const newFoundArticles = foundArticles.map((c) => c.lsId === newFoundArticle.lsId ? newFoundArticle : c);
-      console.log(newFoundArticles)
-      localStorage.removeItem('foundItems')
-      localStorage.setItem('foundItems', JSON.stringify(newFoundArticles))
-      const foundItemsLocal = JSON.parse(localStorage.getItem('foundItems'))
-      setFoundArticles(foundItemsLocal)
-    }).catch((err) => console.log(err));
-  }
-
-  function keyWordsArray() {
-    const key = savedArticles.map((item) => item.keyword)
-    return key.sort().filter(function (item, pos, ary) {
-      return !pos || item !== ary[pos - 1];
-    });
-  }
-
-  useEffect(() => {
-    document.addEventListener('keyup', handleEscPress, false);
-    return () => {
-      document.removeEventListener('keyup', handleEscPress, false);
-    };
-  }, [handleEscPress])
-
-
-  useEffect(() => {
-
+  React.useEffect(() => {
     tokenCheck();
+    const cards = JSON.parse(localStorage.getItem('news-cards'));
+    if (cards) {
+      setIsFound(true);
+      setCards(cards);
+    }
   }, []);
 
-  useEffect(() => {
-    const foundItemsLocal = JSON.parse(localStorage.getItem('foundItems'))
-    const word = JSON.parse(localStorage.getItem('keyWord'))
-    if (foundItemsLocal !== null) {
-      setFoundArticles(foundItemsLocal)
-      setKeyWord(word)
-      setHaveResults(true)
+  function handleEscClose(e) {
+    if (e.key === 'Escape') {
+      closeAllPopups();
     }
-    mainApi.getInitialInfo().then(
-      (res) => {
-        const items = res[1]
-        setSavedArticles(items)
-      }).catch((err) => {
-        console.log(err);
-        setUserLoggedIn(false)
-      });
-  }, [])
+  }
 
+  function handleConfirmPopupOpen() {
+    closeAllPopups();
+    setConfirmPopupOpen(true);
+    document.addEventListener('keydown', handleEscClose);
+  }
+
+  function handleRegisterPopupOpen() {
+    closeAllPopups();
+    setRegisterPopupOpen(true);
+    document.addEventListener('keydown', handleEscClose);
+  }
+
+  function handleLoginPopupOpen() {
+    closeAllPopups();
+    setLoginPopupOpen(true);
+    document.addEventListener('keydown', handleEscClose);
+  }
+
+  function closeAllPopups() {
+    setRegisterPopupOpen(false);
+    setLoginPopupOpen(false);
+    setConfirmPopupOpen(false);
+    document.removeEventListener('keydown', handleEscClose);
+  }
+
+  function tokenCheck() {
+    mainApi.getUserInfo()
+      .then((res) => {
+        if (res) {
+          setCurrentUser({
+            id: res._id,
+            name: res.name,
+          });
+          setLoggedIn(true);
+          setLoginErrorMessage(null);
+          localStorage.setItem('news-app', '1');
+        }
+      })
+      .catch(err => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            console.log(msg.message || SERVER_ERR);
+          });
+        }
+      });
+  }
+
+  function handleRegister({ email, password, name }) {
+    setIsLoading(true);
+    return mainApi.register(email, password, name)
+      .then(() => {
+        handleConfirmPopupOpen();
+        setRegisterErrorMessage(null);
+      })
+      .catch((err) => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setRegisterErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            setRegisterErrorMessage(msg.message || SERVER_ERR);
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleLogin({ email, password }) {
+    setIsLoading(true);
+    return mainApi.authorize(email, password)
+      .then(() => {
+        setLoginErrorMessage(null);
+        tokenCheck();
+        closeAllPopups();
+      })
+      .catch((err) => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setLoginErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            setLoginErrorMessage(msg.message || SERVER_ERR);
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleSignOut() {
+    return mainApi.signOut()
+      .then((res) => {
+        setErrorMessage(res.message);
+        setLoggedIn(false);
+        localStorage.clear();
+        history.push('/');
+        window.location.reload();
+      })
+      .catch(() => {
+        setErrorMessage(SERVER_ERR);
+      })
+  }
+
+  function handleSearch(value) {
+    setIsLoading(true);
+    setIsFound(true);
+    return newsApi.getSearchCardsResults(value)
+      .then((data) => {
+        const res = data.articles;
+        if (res.length > 0) {
+          const newCards = res.map((elem, index) => {
+            const timestamp = Date.parse(elem.publishedAt);
+            const date = new Date(timestamp);
+            const dayAndMonth = date.toLocaleString('default', { day: 'numeric', month: 'long' });
+            const year = date.getFullYear();
+            const newDate = `${dayAndMonth}, ${year}`;
+            return {
+              dataId: index,
+              keyword: value,
+              title: elem.title,
+              text: elem.content || 'Text',
+              date: newDate,
+              source: elem.source.name,
+              link: elem.url,
+              image: elem.urlToImage,
+              description: elem.description
+            };
+          });
+          setCards(newCards);
+          setCount(0);
+          localStorage.setItem('news-cards', JSON.stringify(newCards));
+        } else {
+          setCards([]);
+        }
+      })
+      .catch(() => {
+        setSearchErr(CARD_SEARCH_ERR);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleCardAdd({dataId, keyword, title, text, date, source, link, image}) {
+    const formatterdKeyword = keyword[0].toUpperCase() + keyword.slice(1).toLowerCase();
+    setIsLoadingAdd(true);
+
+    return mainApi.setNewCard(formatterdKeyword, title, text, date, source, link, image)
+      .then((newCard) => {
+        const obj = {
+          ...newCard,
+          isFaved: true,
+          dataId: dataId,
+        };
+        const newCards = cards.map((c) => c.dataId === dataId ? obj : c);
+        setCards(newCards);
+        localStorage.setItem('news-cards', JSON.stringify(newCards));
+      })
+      .catch((err) => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            setErrorMessage(msg.message || SERVER_ERR);
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoadingAdd(false);
+      })
+  }
+
+  function handleCardDelete(id, dataId, type) {
+    setIsLoadingAdd(true);
+
+    return mainApi.deleteCard(id)
+      .then((res) => {
+        setErrorMessage(res.message);
+        let newCards;
+        if (type === 'news') {
+          newCards = cards.map((c) => c.dataId === dataId ? { ...c, isFaved: false } : c);
+        } else if (type === 'saved') {
+          const newSavedCards = savedCards.filter((c) => c._id !== id);
+          newCards = cards.map((c) => c._id === id ? { ...c, isFaved: false } : c);
+          setSavedCards(newSavedCards);
+        }
+        setCards(newCards);
+        localStorage.setItem('news-cards', JSON.stringify(newCards));
+      })
+      .catch((err) => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            setErrorMessage(msg.message || SERVER_ERR);
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoadingAdd(false);
+      })
+  }
+
+  function handleShowMore() {
+    if (cards.length >= 0) {
+      setCount(count + CARDS_IN_A_ROW);
+    }
+  }
+
+  function handleSetErrMessage(msg = '') {
+    setErrorMessage(msg);
+  }
+
+  function getSavedCards() {
+    setIsLoading(true);
+    return mainApi.getSavedCards()
+      .then((res) => {
+        setSavedCards(res.reverse());
+      })
+      .catch((err) => {
+        if (err.toString() === 'TypeError: Failed to fetch') {
+          setLoginErrorMessage(CONNECTION_REFUSED);
+        } else {
+          err.then((msg) => {
+            setLoginErrorMessage(msg.message || SERVER_ERR);
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="App">
-        <Switch>
-          <Route exact path="/">
-            <Header
-              isNavigationOpened={isNavigationOpened}
-              openNavigationHandler={toggleNavigation}
-              userLoggedIn={isUserLoggedIn}
-              theme={`white`}
-              openSignInPopup={openSignInPopup}
-              logOut={signOut}
-            />
-            <SearchForm
-              onSearchWord={handleSearchWord}></SearchForm>
-            <Preloader active={isStartSerching}></Preloader>
-            <RequestPreloader active={isWaitingResponse}></RequestPreloader>
-            <NoNewsFound active={isNoResults} />
-            <ServerError active={isServerError} />
-            <NewsCardList
-              active={isHaveResults}
-              theme='searchCards'
-              isUserLoggedIn={isUserLoggedIn}
-              initialArticles={foundArticles}
-              onSaveClick={handleSaveClick}
-              onDeleteClick={handleDeleteClick}
-              openSignUpPopup={openSignUpPopup}
-              keyWord={keyWord} />
-            <About></About>
-            <Footer></Footer>
-            <Login
-              isOpen={isSignInPopupOpened}
-              goToAnotherPopup={goToSignUpPopup}
-              onClose={closeAllPopups}
-              overlayClose={closeAllPopups}
-              authorization={authorization}
-              apiErrorText={apiErrorText}>
-            </Login>
-            <Register
-              isOpen={isSignUpPopupOpened}
-              goToAnotherPopup={goToSignInPopup}
-              onClose={closeAllPopups}
-              registration={registration}
-              overlayClose={closeAllPopups}
-              apiErrorText={apiErrorText}>
-            </Register>
-            <InfoToolTip
-              onClose={closeInfoToolTip}
-              isOpen={isInfoToolTipOpened}
-              overlayClose={closeAllPopups}
-              goToSignInPopup={goToSignInPopup}>
-            </InfoToolTip>
-          </Route>
-          <ProtectedRoute path="/saved-news" loggedIn={isUserLoggedIn} component={SavedNews}
-            openSignInPopup={openSignInPopup}
-            isNavigationOpened={isNavigationOpened}
-            openNavigationHandler={toggleNavigation}
-            logOut={signOut}
-            savedArticlesAmount={savedArticles.length}
-            keyWordsArray={keyWordsArray()}
-            isUserLoggedIn={isUserLoggedIn}
-            initialArticles={foundArticles}
-            savedArticles={savedArticles}
-            handleDeleteClickFromSaved={handleDeleteClickFromSaved}>
-          </ProtectedRoute>
-        </Switch>
-      </div>
-    </CurrentUserContext.Provider >
+    <div className="page">
+      <CurrentUserContext.Provider value={currentUser}>
+        <main className="content">
+          <Switch>
+            <Route exact path="/">
+              <Header
+                loggedIn={loggedIn}
+                onSignIn={handleLoginPopupOpen}
+                onSignOut={handleSignOut}
+                isPopupOpen={isPopupOpen}
+                onSearch={handleSearch}
+                isLoading={isLoading}
+              />
+              <Main
+                loggedIn={loggedIn}
+                isLoading={isLoading}
+                isLoadingAdd={isLoadingAdd}
+                cards={cards}
+                isFound={isFound}
+                onCardAdd={handleCardAdd}
+                onCardDelete={handleCardDelete}
+                count={count}
+                onShowMore={handleShowMore}
+                onSignIn={handleLoginPopupOpen}
+                searchErr={searchErr}
+              />
+            </Route>
+            <ProtectedRoute
+              loggedIn={loggedIn}
+              path="/saved-news"
+              onRedirect={handleLoginPopupOpen}
+              onRedirectMessage={handleSetErrMessage}
+            >
+              <SavedNewsHeader
+                loggedIn={loggedIn}
+                onSignIn={handleLoginPopupOpen}
+                isPopupOpen={isPopupOpen}
+                onSignOut={handleSignOut}
+                cards={cards}
+                savedCards={savedCards}
+              />
+              <SavedNews
+                loggedIn={loggedIn}
+                isLoading={isLoading}
+                onCardDelete={handleCardDelete}
+                onGetCards={getSavedCards}
+                savedCards={savedCards}
+              />
+            </ProtectedRoute>
+            <Route path="*">
+              <Redirect to="/"/>
+            </Route>
+          </Switch>
+          <Footer/>
+          <RegisterPopup
+            isOpen={isRegisterPopupOpen}
+            onClose={closeAllPopups}
+            onRegister={handleRegister}
+            isLoading={isLoading}
+            registerErrorMessage={registerErrorMessage}
+            onButtonLoginClick={handleLoginPopupOpen}
+          />
+          <LoginPopup
+            isOpen={isLoginPopupOpen}
+            onClose={closeAllPopups}
+            onLogin={handleLogin}
+            isLoading={isLoading}
+            loginErrorMessage={loginErrorMessage}
+            onButtonRegisterClick={handleRegisterPopupOpen}
+          />
+          <ConfirmPopup
+            isOpen={isConfirmPopupOpen}
+            onClose={closeAllPopups}
+            onButtonClick={handleLoginPopupOpen}
+          />
+          {errorMessage &&
+          <ErrorMessagePopup
+            errMessage={errorMessage}
+            onSetErrorMessage={handleSetErrMessage}
+          />
+          }
+        </main>
+      </CurrentUserContext.Provider>
+    </div>
   );
 }
 

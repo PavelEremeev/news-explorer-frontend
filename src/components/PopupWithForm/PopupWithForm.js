@@ -1,33 +1,38 @@
 import React from 'react';
 import './PopupWithForm.css';
 
-function PopupWithForm({ title, isOpen, onClose, children, onSubmit, linkText, goToAnotherPopup, overlayClose}) {
+function PopupWithForm(
+  { isOpen,
+    onClose,
+    onSubmit,
+    title,
+    children,
+    onButtonClick,
+    linkTo
+  }) {
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        onSubmit();
-    }
+  function stopBubble(evt) {
+    evt.stopPropagation();
+  }
 
-    function closePopupOverlay(evt) {
-        if (evt.target === evt.currentTarget) {
-            overlayClose()
-        }
-    }
-
-    return (
-        <section className={isOpen ? `popup popup_opened` : `popup`} onClick={closePopupOverlay}>
-            <form className={`popup__container`} onSubmit={handleSubmit} action="#" noValidate>
-                <button type="button" onClick={onClose} className="popup__close-button"></button>
-                <h3 className="popup__title">{title}</h3>
-                {children}
-                <div className="popup__signup">
-                    <p className="popup__signup">или</p>
-                    <p onClick={goToAnotherPopup} className="popup__link">{linkText}</p>
-                </div>
-            </form>
-        </section>
-    );
+  return (
+    <div className={`popup ${isOpen ? 'popup_opened' : ''}`}
+         onClick={onClose}>
+      <div className="popup__container" onClick={stopBubble}>
+        <button type="button" className="popup__close-button" onClick={onClose}/>
+        <h2 className="popup__title">{title}</h2>
+        <form action="#" method="post" className="form" noValidate onSubmit={onSubmit}>
+          {children}
+        </form>
+        <p className="popup__text">или</p>
+        <button type="button"
+                className="popup__change-button"
+                onClick={onButtonClick}>
+          {linkTo === 'login' ? 'Зарегистрироваться' : 'Войти'}
+        </button>
+      </div>
+    </div>
+  );
 }
-
 
 export default PopupWithForm;

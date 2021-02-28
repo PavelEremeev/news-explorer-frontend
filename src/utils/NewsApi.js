@@ -1,43 +1,29 @@
-import moment from 'moment'
-import { SEARCHDAYS } from './constants'
-const newsApiKey = 'fd1e859e79f74af4b07453725f46383e';
-const today = moment().format()
-const weekAgo = moment().subtract(SEARCHDAYS, 'days').format()
-console.log(today)
-console.log(weekAgo)
-
+import {API_KEY, BASE_URL_API, DATE_TO} from "./config";
 
 class NewsApi {
-    constructor({ address, pageSize, from, to, apiKey }) {
-        this._address = address;
-        this._pageSize = pageSize;
-        this._from = from;
-        this._to = to;
-        this._apiKey = apiKey;
-    }
+  constructor({ baseUrl, apiKey }) {
+    this._baseUrl = baseUrl;
+    this._apiKey = apiKey;
+  }
 
-    getNewsCardList(searchWord) {
-        return fetch(`${this._address}?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}&apiKey=${this._apiKey}`, {})
-            .then((res) =>
-                res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-            );
-    }
-
-    // getNewsCardList(searchWord) {
-    //     return fetch(`${this._address}/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}`, {
-    //         headers: {
-    //             authorization: newsApiKey,
-    //         },
-    //     }).then((res) =>
-    //         res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    //     );
-    // }
+  getSearchCardsResults(value) {
+    const date = new Date();
+    const dateFrom = date.toISOString();
+    const dateTo = new Date(date.setDate(date.getDate() - DATE_TO)).toISOString();
+    return fetch(`${this._baseUrl}?q=${value}&pageSize=100&from=${dateFrom}&to=${dateTo}&apiKey=${this._apiKey}`, {})
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(res.status);
+      })
+  }
 }
 
-export const newsApi = new NewsApi({
-    address: 'https://nomoreparties.co',
-    pageSize: 100,
-    from: weekAgo,
-    to: today,
-    apiKey: newsApiKey,
+const newsApi = new NewsApi({
+  baseUrl: BASE_URL_API,
+  apiKey: API_KEY,
 });
+
+export default newsApi;
+

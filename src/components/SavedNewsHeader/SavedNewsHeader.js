@@ -1,21 +1,84 @@
 import React from 'react';
 import './SavedNewsHeader.css';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import Navigation from '../../components/Navigation/Navigation';
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 
+function SavedNewsHeader(
+  { loggedIn, titles, onSignIn, onSignOut, isPopupOpen, savedCards }) {
 
-function SavedNewsHeader({savedArticlesAmount, keyWordsArray}) {
-    const currentUser = React.useContext(CurrentUserContext);
-    const keyWords = keyWordsArray.join(', ')
+  const currentUser = React.useContext(CurrentUserContext);
+  const [category, setCategory] = React.useState([]);
+  const [extension, setExtension] = React.useState('');
+  const [numArticles, setNumArticles] = React.useState('');
 
-    return (
-        <section className="saved-news">
-            <div className="saved-news__container">
-                <h3 className="saved-news__title">Сохраненные статьи</h3>
-                <h1 className="saved-news__main-text">{`${currentUser.name}, у вас ${savedArticlesAmount} сохраненных статей`}</h1>
-                <h3 className="saved-news__subtitle">По ключевым словам: <span className="saved-news__key-word">{`${keyWords}`}</span></h3>
-            </div>
-        </section>
-    );
+  React.useEffect(() => {
+    function getPopularCategory() {
+      const categoryCountObj = savedCards.reduce((acc, cur) => {
+        if (acc[cur.keyword]) {
+          acc[cur.keyword] += 1;
+        } else {
+          acc[cur.keyword] = 1;
+        }
+        return acc;
+      }, {});
+      const arrNames = Object.keys(categoryCountObj).sort((a, b) => {
+        return categoryCountObj[b] - categoryCountObj[a];
+      });
+      setCategory(arrNames);
+    }
+
+    getPopularCategory();
+  }, [savedCards]);
+
+  React.useEffect(() => {
+    const getNumbersExtensions = (n, titles) => {
+      return titles[
+        (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)
+        ];
+    };
+
+    setExtension(getNumbersExtensions(
+      category.length - 2,
+      ['-ой другой', '-м другим', '-и другим']
+    ));
+
+    setNumArticles(getNumbersExtensions(
+      savedCards.length,
+      ['сохраненная статья', 'сохраненные статьи', 'сохраненных статей']
+    ));
+  }, [category]);
+
+  return (
+    <header className="saved-news-header">
+      <Navigation
+        loggedIn={loggedIn}
+        onSignIn={onSignIn}
+        onSignOut={onSignOut}
+        theme={'saved-news'}
+        isPopupOpen={isPopupOpen}
+      />
+      <div className="saved-news-header__container">
+        <p className="saved-news-header__text">Сохранённые статьи</p>
+        <h2 className="saved-news-header__title">
+          {`${currentUser.name}, у вас ${savedCards.length} ${numArticles}`}
+        </h2>
+        {category.length > 0 &&
+        <p className="saved-news-header__subtitle">
+          По ключевым словам:
+          <span className="saved-news-header__span-accent"> {category[0] || ''}</span>
+          {category.length > 1 && ','}
+          <span className="saved-news-header__span-accent"> {category[1] || ''}</span>
+          {category.length >= 3 && ' и'}
+          {category.length === 3 &&
+          <span className="saved-news-header__span-accent"> {category[2]}</span>}
+          {category.length > 3 &&
+          <span className="saved-news-header__span-accent"> {`${category.length - 2}${extension}`}</span>
+          }
+        </p>
+        }
+      </div>
+    </header>
+  );
 }
 
 export default SavedNewsHeader;
