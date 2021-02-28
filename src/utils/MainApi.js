@@ -1,5 +1,5 @@
 import { BASE_URL } from "./config";
-
+import { setToken } from "./token"
 class MainApi {
   constructor({ baseUrl }) {
     this._baseUrl = baseUrl;
@@ -31,11 +31,14 @@ class MainApi {
       },
       body: JSON.stringify({ email, password })
     })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
+      .then(res => res.json())
+      .then((data) => {
+        if (data.token) {
+          setToken(data.token);
+          return data;
+        } else {
+          return Promise.reject(res.json());
         }
-        return Promise.reject(res.json());
       })
   }
 

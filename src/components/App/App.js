@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
 import Main from '../../components/Main/Main';
 import SavedNews from '../../components/SavedNews/SavedNews';
@@ -11,11 +11,12 @@ import LoginPopup from '../../components/LoginPopup/LoginPopup';
 import ConfirmPopup from '../../components/ConfirmPopup/ConfirmPopup';
 import mainApi from "../../utils/MainApi";
 import newsApi from "../../utils/NewsApi";
-import {CARD_SEARCH_ERR, CONNECTION_REFUSED, SERVER_ERR} from "../../utils/constants";
-import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import { CARD_SEARCH_ERR, CONNECTION_REFUSED, SERVER_ERR } from "../../utils/constants";
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import ErrorMessagePopup from '../../components/ErrorMessagePopup/ErrorMessagePopup';
-import {CARDS_IN_A_ROW} from "../../utils/config";
+import { CARDS_IN_A_ROW } from "../../utils/config";
+import { getToken, setToken, removeToken } from "../../utils/token";
 
 function App() {
   const history = useHistory();
@@ -85,6 +86,11 @@ function App() {
   }
 
   function tokenCheck() {
+    const jwt = getToken();
+    if (!jwt) {
+
+      return;
+    }
     mainApi.getUserInfo()
       .then((res) => {
         if (res) {
@@ -134,6 +140,7 @@ function App() {
     return mainApi.authorize(email, password)
       .then(() => {
         setLoginErrorMessage(null);
+        setToken(data.token)
         tokenCheck();
         closeAllPopups();
       })
@@ -155,6 +162,7 @@ function App() {
     return mainApi.signOut()
       .then((res) => {
         setErrorMessage(res.message);
+        removeToken()
         setLoggedIn(false);
         localStorage.clear();
         history.push('/');
@@ -205,7 +213,7 @@ function App() {
       })
   }
 
-  function handleCardAdd({dataId, keyword, title, text, date, source, link, image}) {
+  function handleCardAdd({ dataId, keyword, title, text, date, source, link, image }) {
     const formatterdKeyword = keyword[0].toUpperCase() + keyword.slice(1).toLowerCase();
     setIsLoadingAdd(true);
 
@@ -346,10 +354,10 @@ function App() {
               />
             </ProtectedRoute>
             <Route path="*">
-              <Redirect to="/"/>
+              <Redirect to="/" />
             </Route>
           </Switch>
-          <Footer/>
+          <Footer />
           <RegisterPopup
             isOpen={isRegisterPopupOpen}
             onClose={closeAllPopups}
@@ -372,10 +380,10 @@ function App() {
             onButtonClick={handleLoginPopupOpen}
           />
           {errorMessage &&
-          <ErrorMessagePopup
-            errMessage={errorMessage}
-            onSetErrorMessage={handleSetErrMessage}
-          />
+            <ErrorMessagePopup
+              errMessage={errorMessage}
+              onSetErrorMessage={handleSetErrMessage}
+            />
           }
         </main>
       </CurrentUserContext.Provider>
