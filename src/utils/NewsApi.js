@@ -1,5 +1,5 @@
-import moment from 'moment' 
-import {SEARCHDAYS} from './constants'
+import moment from 'moment'
+import { SEARCHDAYS } from './constants'
 const newsApiKey = '30e1c87cd2b74b209adae54026d65f1a';
 const today = moment().format()
 const weekAgo = moment().subtract(SEARCHDAYS, 'days').format()
@@ -27,8 +27,8 @@ class NewsApi {
 }
 
 export const newsApi = new NewsApi({
-    address: 'https://newsapi.org',
-    pageSize: 100, 
+    address: 'https://nomoreparties.co/news',
+    pageSize: 100,
     from: weekAgo,
     to: today,
 });

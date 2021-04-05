@@ -1,6 +1,6 @@
 import { setToken } from './token';
 
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://api.eremeev2.students.nomoredomains.rocks';
 
 
 export const register = (name, email, password) => {
