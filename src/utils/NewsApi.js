@@ -1,29 +1,34 @@
-import {API_KEY, BASE_URL_API, DATE_TO} from "./config";
+import moment from 'moment' 
+import {SEARCHDAYS} from './constants'
+const newsApiKey = '30e1c87cd2b74b209adae54026d65f1a';
+const today = moment().format()
+const weekAgo = moment().subtract(SEARCHDAYS, 'days').format()
+console.log(today)
+console.log(weekAgo)
+
 
 class NewsApi {
-  constructor({ baseUrl, apiKey }) {
-    this._baseUrl = baseUrl;
-    this._apiKey = apiKey;
-  }
+    constructor({ address, pageSize, from, to }) {
+        this._address = address;
+        this._pageSize = pageSize;
+        this._from = from;
+        this._to = to;
+    }
 
-  getSearchCardsResults(value) {
-    const date = new Date();
-    const dateFrom = date.toISOString();
-    const dateTo = new Date(date.setDate(date.getDate() - DATE_TO)).toISOString();
-    return fetch(`${this._baseUrl}?q=${value}&pageSize=100&from=${dateFrom}&to=${dateTo}&apiKey=${this._apiKey}`, {})
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-  }
+    getNewsCardList(searchWord) {
+        return fetch(`${this._address}/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}`, {
+            headers: {
+                authorization: newsApiKey,
+            },
+        }).then((res) =>
+            res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
+        );
+    }
 }
 
-const newsApi = new NewsApi({
-  baseUrl: BASE_URL_API,
-  apiKey: API_KEY,
+export const newsApi = new NewsApi({
+    address: 'https://newsapi.org',
+    pageSize: 100, 
+    from: weekAgo,
+    to: today,
 });
-
-export default newsApi;
-

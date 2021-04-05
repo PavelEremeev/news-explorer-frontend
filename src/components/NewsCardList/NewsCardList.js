@@ -1,64 +1,63 @@
-import React from 'react';
-import './NewsCardList.css';
-import NotFoundResults from '../../components/NotFoundResults/NotFoundResults';
-import NewsCard from '../../components/NewsCard/NewsCard';
-import Preloader from '../../components/Preloader/Preloader';
-import {CARDS_IN_A_ROW} from "../../utils/config";
+import React, { useState } from 'react';
+import NewsCard from '../NewsCard/NewsCard.js'
+import './NewsCardList.css'
+import {CARDSINROW} from '../../utils/constants'
 
-function NewsCardList(
-  {
-    loggedIn,
-    isLoading,
-    cards,
-    isFound,
-    category,
-    onCardAdd,
-    onCardDelete,
-    count,
-    onShowMore,
-    onSignIn,
-    searchErr,
-    isLoadingAdd,
-  }) {
+function NewsCardList({ isUserLoggedIn, theme, active, initialArticles, savedArticles, onSaveClick, onDeleteClick, onDeleteClickFromSaved, keyWord, openSignUpPopup }) {
+    const [row, setRow] = useState(CARDSINROW)
+    
+    function nextRow() {
+        setRow(row + CARDSINROW)
+    }
 
-  function handleClick() {
-    onShowMore();
-  }
+    const articlesAmount = initialArticles.length
 
-  return (
-    <>
-      {isFound &&
-      <section className="news-card-list">
-        {searchErr ? <p className="news-card-list__error">{searchErr}</p> :
-          <>
-            {cards.length > 0 && <h2 className="news-card-list__title">Результаты поиска</h2>}
-            <div className="news-card-list__container">
-              {isLoading ? <Preloader/> : cards.slice(0, count + CARDS_IN_A_ROW).map((card) => (
-                <NewsCard key={card.dataId}
-                          {...card}
-                          loggedIn={loggedIn}
-                          onCardAdd={onCardAdd}
-                          onCardDelete={onCardDelete}
-                          onSignIn={onSignIn}
-                          isLoadingAdd={isLoadingAdd}
-                />))
-              }
+    let elementsToRender = initialArticles.slice(0, row)
+
+    return (
+        <section className={active ? "card-list" : "card-list card-list_closed"}>
+            {theme === 'searchCards' ? <h2 className="card-list__results-title">Результаты поиска</h2> : <></>}
+            <div className="card-list__container">
+                {theme==='searchCards' ?
+                    (elementsToRender.map((card, i) =>
+                    <NewsCard
+                        theme={theme}
+                        isUserLoggedIn={isUserLoggedIn}
+                        keyWord={keyWord}
+                        title={card.title}
+                        text={card.description}
+                        date={card.publishedAt}
+                        source={card.source.name}
+                        link={card.url}
+                        image={card.urlToImage}
+                        item={card}
+                        isSaved={card.isSaved}
+                        onSaveClick={onSaveClick}
+                        onDeleteClick={onDeleteClick}
+                        onDeleteClickFromSaved = {onDeleteClickFromSaved}
+                        openSignUpPopup={openSignUpPopup}
+                        key={i}
+                    />)) :
+                    (savedArticles.map((card, i) =>
+                    <NewsCard
+                        theme={theme}
+                        isUserLoggedIn={isUserLoggedIn}
+                        onDeleteClick={onDeleteClick}
+                        onDeleteClickFromSaved = {onDeleteClickFromSaved}
+                        keyWord={card.keyword}
+                        title={card.title}
+                        text={card.text}
+                        date={card.date}
+                        source={card.source}
+                        link={card.link}
+                        image={card.image}
+                        item={card}
+                        key={i}
+                    />))}
             </div>
-            {(count < cards.length - 1) &&
-            <button
-              type="button"
-              className="news-card-list__button-more"
-              onClick={handleClick}>
-              Показать еще
-            </button>
-            }
-            {cards.length === 0 && <NotFoundResults/>}
-          </>
-        }
-      </section>
-      }
-    </>
-  );
+            {theme === 'searchCards' && row <= articlesAmount ? <button onClick={nextRow} className="card-list__button">Показать еще</button> : <></>}
+        </section>
+    );
 }
 
 export default NewsCardList;

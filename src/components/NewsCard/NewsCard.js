@@ -1,92 +1,64 @@
-import React from 'react';
-import './NewsCard.css';
-import {useLocation} from 'react-router-dom';
-import defaultImg from '../../images/onload-err-default-img.png';
+import React, { useState } from 'react';
+import moment from 'moment';
+import 'moment/locale/ru'
+import './NewsCard.css'
 
-function NewsCard(
-  {
-    urlToImage,
-    alt = 'Картинка',
-    _id = null,
-    dataId = null,
-    keyword,
-    title,
-    text,
-    date,
-    source,
-    link,
-    image,
-    description,
-    isFaved = false,
-    loggedIn,
-    onCardAdd = null,
-    onCardDelete,
-    onSignIn,
-    isLoadingAdd,
-  }) {
+function NewsCard({ title, text, date, source, link, image, onDeleteClick, onDeleteClickFromSaved, keyWord, theme, isUserLoggedIn, item, onSaveClick, isSaved, openSignUpPopup }) {
+    const [isDeleteClicked, setDeleteClicked] = useState(false)
+    const [isFlagClicked, setFlagClicked] = useState(false)
 
-  const location = useLocation();
-  const [img, setImg] = React.useState(image);
-
-  function err() {
-    setImg(defaultImg);
-  }
-
-  function handleClickAdd() {
-    if (!loggedIn) {
-      onSignIn();
-    } else if (isFaved) {
-      onCardDelete(_id, dataId, 'news');
-    } else {
-      onCardAdd({ dataId, keyword, title, text, date, source, link, image });
+    function handleSaveDeleteClick() {
+        if (isSaved) {
+            onDeleteClick(item)
+        } else {
+        onSaveClick(item);}
     }
-  }
+    function handleDeleteClick() {
+        setDeleteClicked(!isDeleteClicked)
+    }
+    function handleDeleteArticle() {
+        onDeleteClickFromSaved(item);
+    }
+    function handleFlagClick() {
+        setFlagClicked(!isFlagClicked)
+    }
 
-  function handleClickDelete() {
-    onCardDelete(_id, dataId, 'saved');
-  }
+    function formatDate(a) {
+        moment.locale('ru');
+        return moment(a).format('LL');
+    }
 
-  return (
-    <article className="news-card">
-      {location.pathname === '/saved-news' ?
-        <button type="button"
-                disabled={isLoadingAdd}
-                className='news-card__button news-card__button_type_delete'
-                onClick={handleClickDelete}/> :
-        <button onClick={handleClickAdd}
-                disabled={isLoadingAdd}
-                type="button"
-                className={`news-card__button news-card__button_type_add ${isFaved ? 'news-card__button_active' : ''}`}
-        />
-      }
-      {location.pathname === '/saved-news' ?
-        <>
-          {loggedIn && <span className="news-card__button-popup">Убрать из сохранённых</span>}
-        </> :
-        <>
-          {!loggedIn && <span className="news-card__button-popup">Войдите, чтобы сохранять статьи</span>}
-        </>
-      }
-      <a href={link}
-         className="news-card__link"
-         target="_blank"
-         rel="noreferrer"
-         title={description}
-      >
-        {location.pathname === '/saved-news' &&
-        <span className="news-card__category news-card__category_active">{keyword}</span>}
-        <img className="news-card__img" src={img || ''} onError={err} alt={alt}/>
-        <div className="news-card__description-container">
-          <div>
-            <p className="news-card__date">{date}</p>
-            <h2 className="news-card__title">{title}</h2>
-            <p className="news-card__text">{text}</p>
-          </div>
-          <p className="news-card__source">{source}</p>
-        </div>
-      </a>
-    </article>
-  );
+    function doNothing() {
+
+    }
+
+
+    return (
+        <article className="card-list__card">
+            <a className="card-list__link" href={link} target="_blank" rel="noreferrer">
+                <img className="card-list__photo" src={image} alt={title} />
+            </a>
+            <p className={theme === 'savedCards' ? `card-list__key-word` : `card-list__key-word_hidden`}>{keyWord}</p>
+            <button onClick={handleDeleteArticle} className={isDeleteClicked ? "card-list__delete-window" : "card-list__delete-window_none"}>Убрать из сохраненных</button>
+            <button onClick={handleDeleteClick} className={theme === 'savedCards' ? "card-list__delete-icon" : "card-list__delete-icon_none"}></button>
+            <button className={isFlagClicked ? "card-list__remind-window" : "card-list__remind-window_none"}>Войдите, чтобы сохранить статью</button>
+            {theme === 'searchCards' ? <button onMouseOver={isUserLoggedIn ? doNothing : handleFlagClick}
+                onMouseOut={isUserLoggedIn ? doNothing : handleFlagClick}
+                onClick={isUserLoggedIn ? handleSaveDeleteClick : openSignUpPopup}
+                className={isSaved ? "card-list__flag_active" : "card-list__flag"}></button> : <button
+                    onClick={handleDeleteClick} className="card-list__delete-icon"></button>}
+            <div className="card-list__text">
+                <h5 className="card-list__date">{formatDate(date)}</h5>
+                <a className="card-list__link" href={link} target="_blank" rel="noreferrer">
+                    <h3 className="card-list__title">{title}</h3>
+                </a>
+                <a className="card-list__link" href={link} target="_blank" rel="noreferrer">
+                    <h4 className="card-list__subtitle">{text}</h4>
+                </a>
+                <h5 className="card-list__source">{source}</h5>
+            </div>
+        </article>
+    );
 }
 
 export default NewsCard;
