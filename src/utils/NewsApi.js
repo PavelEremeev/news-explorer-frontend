@@ -7,7 +7,7 @@ console.log(weekAgo)
 
 
 class NewsApi {
-    constructor({ address, pageSize, from, to }) {
+    constructor({ address, pageSize, from, to, apiKey }) {
         this._address = address;
         this._pageSize = pageSize;
         this._from = from;
@@ -16,7 +16,7 @@ class NewsApi {
     }
 
     getNewsCardList(searchWord) {
-        return fetch(`${this._address}/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}&apiKey=${this._apiKey}`)
+        return fetch(`${this._address}/v2/everything?q=${searchWord}&from=${this._from}&to=${this._to}&pageSize=${this._pageSize}&apiKey=[${this._apiKey}]`)
             .then((res) =>
                 res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
             );
